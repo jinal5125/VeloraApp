@@ -1,0 +1,149 @@
+{% load static %}
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Velora — Notifications</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/userpanel.css' %}">
+<link rel="stylesheet" href="{% static 'css/notifications.css' %}">
+</head>
+<body>
+
+<!-- ══ LEFT SIDEBAR ══════════════════════════════ -->
+<nav class="sidebar">
+  <div class="logo">vel<span>ora</span></div>
+  <div class="nav-links">
+    <a href="{% url 'home' %}"          class="nav-item"><span class="nav-icon"><i class="fa-solid fa-house"></i></span><span class="nav-label">Home</span></a>
+    <a href="{% url 'search' %}"        class="nav-item"><span class="nav-icon"><i class="fa-solid fa-magnifying-glass"></i></span><span class="nav-label">Search</span></a>
+    <a href="{% url 'reels' %}"         class="nav-item"><span class="nav-icon"><i class="fa-solid fa-film"></i></span><span class="nav-label">Reels</span></a>
+    <a href="{% url 'messages' %}"      class="nav-item has-badge"><span class="nav-icon"><i class="fa-solid fa-paper-plane"></i></span><span class="nav-label">Messages</span><span class="badge">4</span></a>
+    <a href="{% url 'notifications' %}" class="nav-item has-badge"><span class="nav-icon"><i class="fa-solid fa-bell"></i></span><span class="nav-label">Notifications</span><span class="badge red">7</span></a>
+    <a href="{% url 'create' %}"        class="nav-item"><span class="nav-icon"><i class="fa-regular fa-square-plus"></i></span><span class="nav-label">Create</span></a>
+    <a href="{% url 'profile' %}" class="sidebar-profile-mini">
+      <span class="nav-icon">
+        {% if uid.profile_pic %}
+        <img src="{{uid.profile_pic.url}}" alt="Profile">
+        {% else %}
+        <img src="https://i.pravatar.cc/80?img=47" alt="Profile">
+        {% endif %}
+      </span>
+      <span class="nav-label">Profile</span>
+    </a>
+  </div>
+  <div class="sidebar-divider"></div>
+  <div class="nav-bottom">
+    <a href="{% url 'settings' %}" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-gear"></i></span><span class="nav-label">Settings</span></a>
+    <a href="{% url 'logout' %}" class="nav-item logout-btn"><span class="nav-icon"><i class="fa-solid fa-right-from-bracket"></i></span><span class="nav-label">Logout</span></a>
+  </div>
+</nav>
+
+<!-- ══ ALL PAGES ══════════════════════════════════ -->
+<div class="pages-wrapper">
+
+<!-- ── NOTIFICATIONS ─────────────────────────────────── -->
+<div id="notifications" class="page page-full" style="display:block;">
+  <form method="POST" onsubmit="event.preventDefault();">
+    {% csrf_token %}
+    <div class="page-content">
+      <div class="page-header"><i class="fa-solid fa-bell"></i> Notifications</div>
+    <div class="notif-list">
+      {% if all_notifications %}
+
+        {% for notification in all_notifications %}
+
+          {% if notification.notification_type == "follow" %}
+
+            <div class="notif-item unread">
+              <div class="notif-av">
+                <img src="{{notification.sender.profile_pic.url}}">
+              </div>
+
+              <div class="notif-body">
+                <span class="notif-name">{{notification.sender.username}}</span> 
+                {{notification.message}} 
+                <span class="notif-time">{{notification.whenpublished}}</span>
+              </div>
+
+              {% if notification.sender.id not in my_following and notification.sender != uid %}
+                <div class="notif-thumb">
+                  <a href="{% url 'follow_unfollow' pk=notification.sender.id %}" class="follow-btn">
+                    Follow back
+                  </a>
+                </div>
+              {% endif %}
+              
+            </div>  
+          {% endif %}
+
+          {% if notification.notification_type == "like" %}
+
+            <div class="notif-item unread">
+              <div class="notif-av">
+                <img src="{{notification.sender.profile_pic.url}}">
+              </div>
+              <div class="notif-body">
+                <span class="notif-name">{{notification.sender.username}}</span> {{notification.message}} <span class="notif-time">{{notification.whenpublished}}</span>
+              </div>
+              <div class="notif-thumb">
+                <a href="#">
+                  {% if notification.post_fk %}
+                    <img src="{{notification.post_fk.image.url}}">
+                  {% elif notification.reel_fk %}
+                    <video src="{{notification.reel_fk.video.url}}" style="width: 100%; height: 100%; object-fit: cover; border-radius: inherit;"></video>
+                  {% else %}
+                    <i class="fa-solid fa-film" style="font-size: 20px; color: #555; display: flex; align-items: center; justify-content: center; height: 100%;"></i>
+                  {% endif %}
+                </a>
+              </div>
+            </div> 
+          
+          {% endif %}
+
+          {% if notification.notification_type == "comment" %}
+
+            <div class="notif-item unread">
+              <div class="notif-av">
+                <img src="{{notification.sender.profile_pic.url}}">
+              </div>
+              <div class="notif-body">
+                <span class="notif-name">{{notification.sender.username}}</span> {{notification.message}} <span class="notif-time">{{notification.whenpublished}}</span>
+              </div>
+              <div class="notif-thumb">
+                <a href="#">
+                  {% if notification.post_fk %}
+                    <img src="{{notification.post_fk.image.url}}">
+                  {% elif notification.reel_fk %}
+                    <video src="{{notification.reel_fk.video.url}}" style="width: 100%; height: 100%; object-fit: cover; border-radius: inherit;"></video>
+                  {% else %}
+                    <i class="fa-solid fa-film" style="font-size: 20px; color: #555; display: flex; align-items: center; justify-content: center; height: 100%;"></i>
+                  {% endif %}
+                </a>
+              </div>
+            </div> 
+          
+          {% endif %}
+
+        {%  endfor %}
+
+        {% else %}
+          <div class="notif-group-title">No New Notifications!</div>
+      {% endif %}
+
+
+      <!-- <div class="notif-item unread"><div class="notif-av"><img src="https://i.pravatar.cc/80?img=33"></div><div class="notif-body"><span class="notif-name">leo.winters</span> started following you. <span class="notif-time">15m</span></div><button class="follow-btn sm">Follow</button></div> -->
+      <!-- <div class="notif-item unread"><div class="notif-av"><img src="https://i.pravatar.cc/80?img=25"></div><div class="notif-body"><span class="notif-name">eli.rahman</span> commented: <em>"Absolutely stunning shot!"</em> <span class="notif-time">1h</span></div><div class="notif-thumb"><img src="https://images.unsplash.com/photo-1533104816931-20fa691ff6ca?w=80&q=80"></div></div> -->
+    </div>
+    <!-- <div class="notif-group-title">This Week</div> -->
+    <!-- <div class="notif-list"> -->
+      <!-- <div class="notif-item"><div class="notif-av"><img src="https://i.pravatar.cc/80?img=44"></div><div class="notif-body"><span class="notif-name">sofie.m</span> mentioned you in a comment. <span class="notif-time">2d</span></div><div class="notif-thumb"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=80&q=80"></div></div> -->
+      <!-- <div class="notif-item"><div class="notif-av"><img src="https://i.pravatar.cc/80?img=17"></div><div class="notif-body"><span class="notif-name">julian.b</span> started following you. <span class="notif-time">3d</span></div><button class="follow-btn sm">Follow</button></div> -->
+      <!-- <div class="notif-item"><div class="notif-av"><img src="https://i.pravatar.cc/80?img=3"></div><div class="notif-body"><span class="notif-name">priya.sharma</span> liked your reel. <span class="notif-time">4d</span></div></div> -->  
+    <!-- </div> -->
+  </form>
+</div>
+
+</div><!-- /pages-wrapper -->
+</body>
+</html>

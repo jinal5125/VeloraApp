@@ -1,0 +1,71 @@
+{% load static %}
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Velora — Create Story</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="{% static 'css/userpanel.css' %}">
+<link rel="stylesheet" href="{% static 'css/create.css' %}">
+</head>
+<body>
+
+<!-- ══ LEFT SIDEBAR ══════════════════════════════ -->
+<nav class="sidebar">
+  <div class="logo">vel<span>ora</span></div>
+  <div class="nav-links">
+    <a href="{% url 'home' %}"          class="nav-item"><span class="nav-icon"><i class="fa-solid fa-house"></i></span><span class="nav-label">Home</span></a>
+    <a href="{% url 'search' %}"        class="nav-item"><span class="nav-icon"><i class="fa-solid fa-magnifying-glass"></i></span><span class="nav-label">Search</span></a>
+    <a href="{% url 'reels' %}"         class="nav-item"><span class="nav-icon"><i class="fa-solid fa-film"></i></span><span class="nav-label">Reels</span></a>
+    <a href="{% url 'messages' %}"      class="nav-item has-badge"><span class="nav-icon"><i class="fa-solid fa-paper-plane"></i></span><span class="nav-label">Messages</span><span class="badge">4</span></a>
+    <a href="{% url 'notifications' %}" class="nav-item has-badge"><span class="nav-icon"><i class="fa-solid fa-bell"></i></span><span class="nav-label">Notifications</span><span class="badge red">7</span></a>
+    <a href="{% url 'create' %}"        class="nav-item"><span class="nav-icon"><i class="fa-regular fa-square-plus"></i></span><span class="nav-label">Create</span></a>
+    <a href="{% url 'profile' %}" class="sidebar-profile-mini">
+      <span class="nav-icon">
+        
+        <img src="{{uid.profile_pic.url}}" alt="Profile">
+        
+      </span>
+      <span class="nav-label">Profile</span>
+    </a>
+  </div>
+  <div class="sidebar-divider"></div>
+  <div class="nav-bottom">
+    <a href="{% url 'settings' %}" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-gear"></i></span><span class="nav-label">Settings</span></a>
+    <a href="{% url 'logout' %}" class="nav-item logout-btn"><span class="nav-icon"><i class="fa-solid fa-right-from-bracket"></i></span><span class="nav-label">Logout</span></a>
+  </div>
+</nav>
+
+<!-- ══ ALL PAGES ══════════════════════════════════ -->
+<div class="pages-wrapper">
+
+<!-- ── CREATE STORY ─────────────────────────────────── -->
+<div id="create" class="page page-full" style="display:block;">
+  <div class="page-content narrow">
+    <div class="page-header"><i class="fa-regular fa-square-plus"></i> Create Story</div>
+    <form method="post" enctype="multipart/form-data" action="{% url 'create_story' %}">
+      {% csrf_token %}
+      <div class="create-box">
+        <div class="create-upload-zone">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+          <div class="upload-text">Drag &amp; drop your photo here</div>
+          <div class="upload-sub">or</div>
+          <label class="upload-btn">Browse Files<input type="file" style="display:none" accept="image/*" name="image"></label>
+          <div class="upload-formats">PNG, JPG, WEBP · Max 10MB</div>
+        </div>
+        <div class="create-form">
+          <div class="form-group"><label class="form-label">Caption</label><textarea class="form-textarea" placeholder="Write a caption… use # for tags, @ for mentions" rows="4" name="caption"></textarea></div>
+          <div class="form-group"><label class="form-label">Location</label><div class="form-input-icon"><i class="fa-solid fa-location-dot"></i><input type="text" class="form-input" placeholder="Add location" name="location"></div></div>
+          <div class="form-group"><label class="form-label">Add Music</label><div class="form-input-icon"><i class="fa-solid fa-music"></i><input type="file" class="form-input" accept="audio/*" name="music"></div></div>
+          <div class="form-group"><label class="form-label">Audience</label><select class="form-input" name="audience"><option>Everyone</option><option>Followers Only</option><option>Close Friends</option></select></div>
+          <div class="create-actions"><a href="{% url 'home' %}" style="text-decoration:none;"><button type="button" class="cancel-btn">Discard</button></a><button type="submit" class="publish-btn"><i class="fa-solid fa-paper-plane"></i> Share Story</button></div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+</div><!-- /pages-wrapper -->
+</body>
+</html>

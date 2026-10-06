@@ -1,0 +1,257 @@
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OTP</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  font-family:'Outfit',sans-serif;
+  background:#f4f6fb;
+  display:flex;
+  justify-content:center;
+  padding:40px 15px;
+}
+
+/* WRAPPER */
+.email-wrapper{
+  max-width:520px;
+  width:100%;
+}
+
+/* 🔥 MEDIUM PREMIUM HEADER */
+.top-bar{
+  background: linear-gradient(135deg, #334155, #1e293b);
+  padding:18px 25px;
+  border-radius:16px 16px 0 0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+/* TEXT COLORS */
+.brand-name{
+  font-family:'Playfair Display',serif;
+  font-size:22px;
+  color:#ffffff;
+}
+.brand-name span{
+  color:#f59e0b;
+}
+
+.top-bar-tagline{
+  font-size:12px;
+  color:#cbd5f5;
+}
+
+/* CARD */
+.email-card{
+  background:#fff;
+  border-radius:0 0 16px 16px;
+  border:1px solid #e5e7eb;
+  box-shadow:0 10px 30px rgba(0,0,0,0.08);
+}
+
+.accent-strip{
+  height:3px;
+  background:linear-gradient(90deg,#f59e0b,#fb923c);
+}
+
+/* BODY */
+.card-body{
+  padding:30px 25px;
+}
+
+/* GREETING */
+.greeting-row{
+  display:flex;
+  gap:14px;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.shield-icon{
+  width:44px;height:44px;
+  background:#fff7ed;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.shield-icon svg{
+  width:20px;height:20px;
+  stroke:#ea580c;
+}
+
+.greeting-text h2{
+  font-size:20px;
+  font-family:'Playfair Display',serif;
+  margin-bottom:4px;
+  color:#111827;
+}
+
+.greeting-text p{
+  font-size:15px;
+  color:#374151;
+  font-weight:500;
+}
+
+/* MESSAGE */
+.msg{
+  font-size:14px;
+  color:#4b5563;
+  margin-bottom:25px;
+}
+
+/* OTP */
+.otp-section{
+  text-align:center;
+  border:1px solid #e5e7eb;
+  border-radius:14px;
+  padding:25px 20px;
+  background:#ffffff;
+}
+
+.otp-tag{
+  font-size:11px;
+  padding:5px 14px;
+  border-radius:20px;
+  background:#fff7ed;
+  color:#ea580c;
+  margin-bottom:15px;
+}
+
+.otp-digits{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  margin-bottom:10px;
+}
+
+.otp-digit{
+  width:48px;
+  height:56px;
+  font-size:22px;
+  font-weight:600;
+  border-radius:10px;
+  border:1.5px solid #d1d5db;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#fff;
+}
+
+.otp-digit:nth-child(1),
+.otp-digit:nth-child(2),
+.otp-digit:nth-child(3),
+.otp-digit:nth-child(4){
+  border-bottom:2px solid #f59e0b;
+}
+
+.otp-hint{
+  font-size:12px;
+  color:#9ca3af;
+}
+
+/* TIMER */
+.timer-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:20px;
+  background:#f9fafb;
+  padding:12px 15px;
+  border-radius:10px;
+  border:1px solid #e5e7eb;
+}
+
+.timer-badge{
+  font-size:11px;
+  background:#fff7ed;
+  color:#ea580c;
+  padding:4px 10px;
+  border-radius:20px;
+}
+
+/* FOOTER */
+.card-footer{
+  text-align:center;
+  padding:18px;
+  font-size:12px;
+  color:#9ca3af;
+}
+</style>
+</head>
+
+<body>
+
+<div class="email-wrapper">
+
+  <!-- 🔥 HEADER -->
+  <div class="top-bar">
+    <div class="brand-name">vel<span>ora</span></div>
+    <div class="top-bar-tagline">Account Security</div>
+  </div>
+
+  <div class="email-card">
+    <div class="accent-strip"></div>
+
+    <div class="card-body">
+
+      <div class="greeting-row">
+        <div class="shield-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <div class="greeting-text">
+          <h2>Verify Your Identity</h2>
+          <p>Hello, Dear 👋</p>
+        </div>
+      </div>
+
+      <p class="msg">
+        Use the code below to verify your account.
+      </p>
+
+      <div class="otp-section">
+        <div class="otp-tag">One-Time Code</div>
+
+        <p class="msg">
+        Your OTP is here..
+        </p>
+
+
+       <div align="center">
+
+  <h1 style="letter-spacing:8px; font-size:28px; margin:10px 0; color:#111;">
+    {{data.otp}}
+  </h1>
+
+</div>
+
+        <!-- <div class="otp-hint">Enter this code to continue</div> -->
+      </div>
+
+      <div class="timer-row">
+        <div>Expires in <strong>30 sec</strong></div>
+      </div>
+
+    </div>
+
+    <div class="card-footer">
+      © 2026 Velora
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>

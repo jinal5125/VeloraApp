@@ -1,0 +1,139 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Velora — Followers</title>
+  <meta name="description" content="View followers list on Velora.">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/userpanel.css' %}">
+  <link rel="stylesheet" href="{% static 'css/user_follow.css' %}">
+</head>
+
+<body>
+
+  <!-- ══ LEFT SIDEBAR ══════════════════════════════ -->
+  <nav class="sidebar">
+    <div class="logo">vel<span>ora</span></div>
+    <div class="nav-links">
+      <a href="{% url 'home' %}" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-house"></i></span><span
+          class="nav-label">Home</span></a>
+      <a href="{% url 'search' %}" class="nav-item"><span class="nav-icon"><i
+            class="fa-solid fa-magnifying-glass"></i></span><span class="nav-label">Search</span></a>
+      <a href="{% url 'reels' %}" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-film"></i></span><span
+          class="nav-label">Reels</span></a>
+      <a href="{% url 'messages' %}" class="nav-item has-badge"><span class="nav-icon"><i
+            class="fa-solid fa-paper-plane"></i></span><span class="nav-label">Messages</span><span
+          class="badge">4</span></a>
+      <a href="{% url 'notifications' %}" class="nav-item has-badge"><span class="nav-icon"><i
+            class="fa-solid fa-bell"></i></span><span class="nav-label">Notifications</span><span
+          class="badge red">7</span></a>
+      <a href="{% url 'create' %}" class="nav-item"><span class="nav-icon"><i
+            class="fa-regular fa-square-plus"></i></span><span class="nav-label">Create</span></a>
+      <a href="{% url 'profile' %}" class="sidebar-profile-mini">
+        <span class="nav-icon">
+          {% if uid.profile_pic %}
+          <img src="{{ uid.profile_pic.url }}" alt="Profile">
+          {% else %}
+          <img src="https://i.pravatar.cc/80?img=47" alt="Profile">
+          {% endif %}
+        </span>
+        <span class="nav-label">Profile</span>
+      </a>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="nav-bottom">
+      <a href="{% url 'settings' %}" class="nav-item"><span class="nav-icon"><i
+            class="fa-solid fa-gear"></i></span><span class="nav-label">Settings</span></a>
+      <a href="{% url 'logout' %}" class="nav-item logout-btn"><span class="nav-icon"><i
+            class="fa-solid fa-right-from-bracket"></i></span><span class="nav-label">Logout</span></a>
+    </div>
+  </nav>
+
+  <!-- ══ MAIN CONTENT ══════════════════════════════ -->
+  <main class="uf-main">
+
+    <!-- ── TOP BAR (← Followers) ─────────────────── -->
+    <div class="uf-topbar">
+      <a href="javascript:history.back()" class="uf-topbar-back"><i class="fa-solid fa-arrow-left"></i></a>
+      <span class="uf-topbar-title">Followers</span>
+    </div>
+
+
+    <!-- ── SCROLLABLE LIST ───────────────────────── -->
+    <div class="uf-content">
+
+      <!-- Search -->
+      <div class="uf-search-wrap">
+        <div class="uf-search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" placeholder="Search">
+        </div>
+      </div>
+
+      <!-- Followers List -->
+      <div class="uf-list">
+
+        <!-- 1 -->
+        {% for f in followers %}
+          <div class="uf-item">
+            <div class="uf-avatar story">
+              {% if f.following.profile_pic %}
+                  <img src="{{ f.following.profile_pic.url }}">
+              {% else %}
+
+                  {% if f.following.gender == "female" %}
+                      <img src="/media/images/girl.png">
+                  {% else %}
+                      <img src="/media/images/boy.png">
+                  {% endif %}
+
+              {% endif %}
+            </div>
+            <div class="uf-info">
+              <div class="uf-name-row">
+                <span class="uf-uname">{{ f.following.username }}</span>
+                <i class="fa-solid fa-circle-check uf-verified-icon"></i>
+              </div>
+              <div class="uf-fname">{{ f.following.fullname }}</div>
+            </div>
+            <div class="uf-btn-wrap">
+              <a href="#" class="uf-btn-remove">Remove</a>
+            </div>
+          </div>
+        {% endfor %}
+        
+        <!-- 2 -->
+        <div class="uf-item">
+          <div class="uf-avatar story">
+            <img src="https://i.pravatar.cc/100?img=10" alt="">
+          </div>
+          <div class="uf-info">
+            <div class="uf-name-row">
+              <span class="uf-uname">meera.singh</span>
+            </div>
+            <div class="uf-fname">Meera Singh</div>
+          </div>
+          <div class="uf-btn-wrap">
+            <a href="#" class="uf-btn-follow">Follow</a>
+          </div>
+        </div>
+
+        
+
+      </div>
+      <!-- /uf-list -->
+
+    </div>
+    <!-- /uf-content -->
+
+  </main>
+
+</body>
+
+</html>

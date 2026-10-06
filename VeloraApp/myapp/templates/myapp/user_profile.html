@@ -1,0 +1,560 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Velora — Jinal Tusli</title>
+  <meta name="description" content="View Jinal Tusli's profile on Velora — photos, reels, and more.">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/userpanel.css' %}">
+  <link rel="stylesheet" href="{% static 'css/user_profile.css' %}">
+</head>
+
+<body>
+
+  <!-- ══ LEFT SIDEBAR ══════════════════════════════ -->
+  <nav class="sidebar">
+    <div class="logo">vel<span>ora</span></div>
+    <div class="nav-links">
+      <a href="{% url 'home' %}" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-house"></i></span><span
+          class="nav-label">Home</span></a>
+      <a href="{% url 'search' %}" class="nav-item"><span class="nav-icon"><i
+            class="fa-solid fa-magnifying-glass"></i></span><span class="nav-label">Search</span></a>
+      <a href="{% url 'reels' %}" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-film"></i></span><span
+          class="nav-label">Reels</span></a>
+      <a href="{% url 'messages' %}" class="nav-item has-badge"><span class="nav-icon"><i
+            class="fa-solid fa-paper-plane"></i></span><span class="nav-label">Messages</span><span
+          class="badge">4</span></a>
+      <a href="{% url 'notifications' %}" class="nav-item has-badge"><span class="nav-icon"><i
+            class="fa-solid fa-bell"></i></span><span class="nav-label">Notifications</span><span
+          class="badge red">7</span></a>
+      <a href="{% url 'create' %}" class="nav-item"><span class="nav-icon"><i
+            class="fa-regular fa-square-plus"></i></span><span class="nav-label">Create</span></a>
+      <a href="{% url 'profile' %}" class="sidebar-profile-mini">
+        <span class="nav-icon">
+          {% if uid.profile_pic %}
+          <img src="{{ uid.profile_pic.url }}" alt="Profile">
+          {% else %}
+          <img src="https://i.pravatar.cc/80?img=47" alt="Profile">
+          {% endif %}
+        </span>
+        <span class="nav-label">Profile</span>
+      </a>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="nav-bottom">
+      <a href="{% url 'settings' %}" class="nav-item"><span class="nav-icon"><i
+            class="fa-solid fa-gear"></i></span><span class="nav-label">Settings</span></a>
+      <a href="{% url 'logout' %}" class="nav-item logout-btn"><span class="nav-icon"><i
+            class="fa-solid fa-right-from-bracket"></i></span><span class="nav-label">Logout</span></a>
+    </div>
+  </nav>
+
+  <!-- ══ MAIN CONTENT ══════════════════════════════ -->
+  <main class="up-main">
+    <div class="up-scroll">
+
+      <!-- ── PROFILE HEADER ──────────────────────── -->
+      <div class="up-header">
+
+        <!-- Avatar Column -->
+        <div class="up-avatar-col">
+          <div class="up-av-ring">
+            <!-- Replace src with {{ view_user.profile_pic.url }} in Django -->
+            {% if profile_user.profile_pic %}
+            <img src="{{ profile_user.profile_pic.url }}" class="up-av">
+            {% else %}
+            <img src="https://i.pravatar.cc/200?img=47" class="up-av">
+            {% endif %}
+          </div>
+          <!-- Active Story Ring indicator (CSS only gradient ring above) -->
+        </div>
+
+        <!-- Info Column -->
+        <div class="up-info-col">
+
+          <!-- Username + Actions Row -->
+          <div class="up-username-row">
+            <h1 class="up-username">{{ profile_user.username }}</h1>
+
+            <!-- Follow / Message / More buttons -->
+            <div class="up-action-row">
+              {% if profile_user != uid %}
+                {% if is_following %}
+                <a href="{% url 'follow_unfollow' profile_user.id %}" class="up-btn-follow" style="text-decoration: none; background: var(--border); color: var(--text);">Following</a>
+                {% else %}
+                <a href="{% url 'follow_unfollow' profile_user.id %}" class="up-btn-follow" style="text-decoration: none;">Follow</a>
+                {% endif %}
+              {% endif %}
+              <a href="{% url 'messages' %}" class="up-btn-msg" id="msgBtn">
+                <i class="fa-solid fa-paper-plane"></i> Message
+              </a>
+              <button class="up-btn-more" id="moreBtn" aria-label="More options">
+                <i class="fa-solid fa-ellipsis"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Fullname + Verified -->
+          <div class="up-fullname">
+            {{ profile_user.fullname }}
+            <span class="up-verified" title="Verified">
+              <i class="fa-solid fa-circle-check"></i>
+            </span>
+          </div>
+
+          <!-- Bio -->
+          <div class="up-bio">
+            {{profile_user.bio}}
+            <!-- <a href="#" class="up-bio-link">velora.app/jinal</a> -->
+          </div>
+
+          <!-- Stats Row -->
+          <div class="up-stats-row">
+            <div class="up-stat">
+              <span class="up-stat-num">{{count_post}}</span>
+              <span class="up-stat-lbl">posts</span>
+            </div>
+            <a href="{% url 'user_followers' profile_user.id %}" class="up-stat">
+              <span class="up-stat-num">{{ count_followers }}</span>
+              <span class="up-stat-lbl">followers</span>
+            </a>
+            <a href="{% url 'user_following' profile_user.id %}" class="up-stat">
+              <span class="up-stat-num">{{ count_following }}</span>
+              <span class="up-stat-lbl">following</span>
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── STORY HIGHLIGHTS ────────────────────── -->
+      <div class="up-highlights">
+        <div class="up-hl-scroll">
+
+          <div class="up-hl-item">
+            <div class="up-hl-ring">
+              <img src="https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=120&q=80" alt="Greece">
+            </div>
+            <span>Greece</span>
+          </div>
+
+          <div class="up-hl-item">
+            <div class="up-hl-ring">
+              <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=120&q=80" alt="Japan">
+            </div>
+            <span>Japan</span>
+          </div>
+
+          <div class="up-hl-item">
+            <div class="up-hl-ring">
+              <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=120&q=80" alt="Food">
+            </div>
+            <span>Food</span>
+          </div>
+
+          <div class="up-hl-item">
+            <div class="up-hl-ring">
+              <img src="https://images.unsplash.com/photo-1533104816931-20fa691ff6ca?w=120&q=80" alt="Italy">
+            </div>
+            <span>Italy</span>
+          </div>
+
+          <div class="up-hl-item">
+            <div class="up-hl-ring">
+              <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=120&q=80" alt="Alps">
+            </div>
+            <span>Alps</span>
+          </div>
+
+          <div class="up-hl-item">
+            <div class="up-hl-ring">
+              <img src="https://images.unsplash.com/photo-1543731068-7e0f5beff43a?w=120&q=80" alt="Ocean">
+            </div>
+            <span>Ocean</span>
+          </div>
+
+          <div class="up-hl-item">
+            <div class="up-hl-ring">
+              <img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?w=120&q=80" alt="Beach">
+            </div>
+            <span>Beach</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── TABS ────────────────────────────────── -->
+      <div class="up-tabs-wrap">
+
+        <!-- CSS-only tab switching with hidden checkboxes -->
+        <input class="up-tab-radio" type="radio" name="up-tab" id="tab-posts" checked>
+        <input class="up-tab-radio" type="radio" name="up-tab" id="tab-reels">
+        <input class="up-tab-radio" type="radio" name="up-tab" id="tab-tagged">
+
+        <div class="up-tabs-bar">
+          <label class="up-tab-label" for="tab-posts">
+            <i class="fa-solid fa-table-cells-large"></i>
+            <span>POSTS</span>
+          </label>
+          <label class="up-tab-label" for="tab-reels">
+            <i class="fa-solid fa-film"></i>
+            <span>REELS</span>
+          </label>
+          <label class="up-tab-label" for="tab-tagged">
+            <i class="fa-solid fa-tag"></i>
+            <span>TAGGED</span>
+          </label>
+        </div>
+
+        <!-- ── TAB PANELS ──────────────────────── -->
+
+        <!-- POSTS GRID -->
+        <div class="up-tab-panel" id="panel-posts">
+          <div class="up-posts-grid">
+
+            {% for post in posts %}
+            <div class="up-grid-item">
+              <img src="{{post.image.url}}" alt="Post">
+              <div class="up-grid-overlay">
+                <span>
+                  <form method="POST" action="{% url 'like_unlike_post' post.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="type" value="post">
+                    {% if post.id in liked_posts %}
+                    <button type="submit" style="background:none;border:none;cursor:pointer;color:red;">
+                      <i class="fa-solid fa-heart"></i>
+                    </button>
+                    {% else %}
+                    <button type="submit" style="background:none;border:none;cursor:pointer;color:white;">
+                      <i class="fa-regular fa-heart"></i>
+                    </button>
+                    {% endif %}
+                  </form>
+                  {{post.like_post.count}}
+                </span>
+                <a href="{% url 'comments' post.id %}" style="text-decoration: none; color: inherit;">
+                  <span><i class="fa-solid fa-comment"></i> {{ post.add_comments_set.count }}</span>
+                </a>
+              </div>
+            </div>
+            {% endfor %}
+
+
+          </div>
+        </div>
+
+        <!-- REELS GRID -->
+        <div class="up-tab-panel" id="panel-reels">
+          <div class="up-reels-grid">
+
+            {% for reel in reels %}
+            <div class="up-reel-item" data-video="{{reel.video.url}}"
+              data-avatar="{% if reel.user.profile_pic %}{{reel.user.profile_pic.url}}{% else %}https://i.pravatar.cc/150?u={{reel.user.id}}{% endif %}"
+              data-username="{{reel.user.username}}" data-caption="{{reel.caption}}" data-id="{{reel.id}}"
+              data-liked="{% if reel.id in liked_reel %}true{% else %}false{% endif %}"
+              data-likes-count="{{reel.like_reel.count}}">
+              <video class="up-reel-video-thumb" src="{{reel.video.url}}" muted></video>
+              <div class="up-reel-overlay">
+                <div class="up-reel-play"><i class="fa-solid fa-play"></i></div>
+                <div class="up-reel-meta">
+                  <form method="POST" action="{% url 'like_unlike_post' reel.id %}" style="display:inline;"
+                    onclick="event.stopPropagation()">
+                    {% csrf_token %}
+                    <input type="hidden" name="type" value="reel">
+                    {% if reel.id in liked_reel %}
+                    <button type="submit" style="background:none;border:none;cursor:pointer;color:red;">
+                      <i class="fa-solid fa-heart"></i>
+                    </button>
+                    {% else %}
+                    <button type="submit" style="background:none;border:none;cursor:pointer;color:white;">
+                      <i class="fa-regular fa-heart"></i>
+                    </button>
+                    {% endif %}
+                  </form>
+                  <a href="{% url 'reel_comments' reel.id %}" style="text-decoration: none; color: inherit;">
+                    <span><i class="fa-solid fa-comment"></i> {{ reel.add_comments_set.count }}</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+
+
+          </div>
+        </div>
+
+        <!-- TAGGED GRID -->
+        <div class="up-tab-panel" id="panel-tagged">
+          <div class="up-posts-grid">
+
+            <div class="up-grid-item" id="gt1">
+              <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80" alt="Tagged 1">
+              <div class="up-grid-overlay">
+                <span><i class="fa-solid fa-heart"></i> 1.4K</span>
+                <span><i class="fa-solid fa-comment"></i> 29</span>
+              </div>
+            </div>
+
+            <div class="up-grid-item" id="gt2">
+              <img src="https://images.unsplash.com/photo-1500099817043-86d46000d58f?w=400&q=80" alt="Tagged 2">
+              <div class="up-grid-overlay">
+                <span><i class="fa-solid fa-heart"></i> 3.9K</span>
+                <span><i class="fa-solid fa-comment"></i> 88</span>
+              </div>
+            </div>
+
+            <div class="up-grid-item" id="gt3">
+              <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=400&q=80" alt="Tagged 3">
+              <div class="up-grid-overlay">
+                <span><i class="fa-solid fa-heart"></i> 2.2K</span>
+                <span><i class="fa-solid fa-comment"></i> 44</span>
+              </div>
+            </div>
+
+            <div class="up-grid-item" id="gt4">
+              <img src="https://images.unsplash.com/photo-1458668383970-8ddd3927deed?w=400&q=80" alt="Tagged 4">
+              <div class="up-grid-overlay">
+                <span><i class="fa-solid fa-heart"></i> 5.5K</span>
+                <span><i class="fa-solid fa-comment"></i> 156</span>
+              </div>
+            </div>
+
+            <div class="up-grid-item" id="gt5">
+              <img src="https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=400&q=80" alt="Tagged 5">
+              <div class="up-grid-overlay">
+                <span><i class="fa-solid fa-heart"></i> 1.1K</span>
+                <span><i class="fa-solid fa-comment"></i> 18</span>
+              </div>
+            </div>
+
+            <div class="up-grid-item" id="gt6">
+              <img src="https://images.unsplash.com/photo-1501411767726-fde92c7958de?w=400&q=80" alt="Tagged 6">
+              <div class="up-grid-overlay">
+                <span><i class="fa-solid fa-heart"></i> 4.0K</span>
+                <span><i class="fa-solid fa-comment"></i> 102</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+      <!-- /up-tabs-wrap -->
+
+    </div>
+    <!-- /up-scroll -->
+  </main>
+
+  <!-- ── REEL MODAL (Instagram Style — copied from profile.html) ── -->
+  <div class="up-reel-modal" id="upReelModal">
+    <div class="up-reel-modal-close" id="upModalClose">&times;</div>
+
+    <div class="up-modal-reel-container">
+      <!-- Main Video -->
+      <video class="up-modal-video-element" id="upModalVideo" loop></video>
+
+      <!-- Play/Pause Icon Overlay -->
+      <div class="up-modal-play-pause-icon" id="upModalPlayIcon">
+        <i class="fa-solid fa-play"></i>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="up-modal-progress-wrap">
+        <div class="up-modal-progress-bar" id="upModalProgressBar"></div>
+      </div>
+
+      <!-- Mute Button -->
+      <button class="up-modal-mute-btn" id="upModalMuteBtn">
+        <i class="fa-solid fa-volume-xmark"></i>
+      </button>
+
+      <!-- Bottom Overlay Info -->
+      <div class="up-modal-reel-overlay">
+        <div class="up-modal-user-row">
+          <img src="" alt="" class="up-modal-user-avatar" id="upModalAvatar">
+          <span class="up-modal-user-name" id="upModalUsername"></span>
+          {% if profile_user != uid %}
+          <button class="up-modal-follow-btn">Follow</button>
+          {% endif %}
+        </div>
+        <div class="up-modal-caption" id="upModalCaption"></div>
+        <div class="up-modal-audio">
+          <i class="fa-solid fa-music"></i> <span>Original Audio</span>
+        </div>
+      </div>
+
+      <!-- Side Actions -->
+      <div class="up-modal-side-actions">
+        <div class="up-modal-action-item">
+          <form id="upModalLikeForm" method="POST" action="">
+            {% csrf_token %}
+            <input type="hidden" name="type" value="reel">
+            <button type="submit" class="up-modal-action-btn" id="upModalLikeBtn">
+              <i class="fa-regular fa-heart"></i>
+            </button>
+          </form>
+          <span id="upModalLikesCount">0</span>
+        </div>
+        <div class="up-modal-action-item">
+          <a href="#" id="upModalCommentLink" style="text-decoration: none; color: inherit;">
+            <button class="up-modal-action-btn"><i class="fa-regular fa-comment"></i></button>
+          </a>
+          <span id="upModalCommentsCount">0</span>
+        </div>
+        <div class="up-modal-action-item">
+          <button class="up-modal-action-btn"><i class="fa-regular fa-paper-plane"></i></button>
+          <span>Share</span>
+        </div>
+        <div class="up-modal-action-item">
+          <button class="up-modal-action-btn"><i class="fa-solid fa-ellipsis"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+      // 🔥 TAB PERSISTENCE
+      const tabRadios = document.querySelectorAll('.up-tab-radio');
+
+      // Restore
+      const savedTabId = localStorage.getItem('userProfileActiveTab');
+      if (savedTabId) {
+        const radioToSelect = document.getElementById(savedTabId);
+        if (radioToSelect) radioToSelect.checked = true;
+      }
+
+      // Save on change
+      tabRadios.forEach(radio => {
+        radio.addEventListener('change', () => {
+          if (radio.checked) {
+            localStorage.setItem('userProfileActiveTab', radio.id);
+          }
+        });
+      });
+
+      // 🔥 REEL MODAL LOGIC
+      const reelItems = document.querySelectorAll('.up-reel-item');
+      const modal = document.getElementById('upReelModal');
+      const modalVideo = document.getElementById('upModalVideo');
+      const modalClose = document.getElementById('upModalClose');
+      const modalAvatar = document.getElementById('upModalAvatar');
+      const modalUsername = document.getElementById('upModalUsername');
+      const modalCaption = document.getElementById('upModalCaption');
+      const modalProgressBar = document.getElementById('upModalProgressBar');
+      const modalMuteBtn = document.getElementById('upModalMuteBtn');
+      const modalPlayIcon = document.getElementById('upModalPlayIcon');
+
+      let isMuted = localStorage.getItem('reelsMuted') === 'true';
+
+      function updateMuteUI() {
+        const icon = modalMuteBtn.querySelector('i');
+        if (isMuted) {
+          icon.classList.remove('fa-volume-high');
+          icon.classList.add('fa-volume-xmark');
+          modalVideo.muted = true;
+        } else {
+          icon.classList.remove('fa-volume-xmark');
+          icon.classList.add('fa-volume-high');
+          modalVideo.muted = false;
+        }
+      }
+
+      reelItems.forEach(item => {
+        item.addEventListener('click', () => {
+          const videoSrc = item.getAttribute('data-video');
+          const avatarSrc = item.getAttribute('data-avatar');
+          const username = item.getAttribute('data-username');
+          const caption = item.getAttribute('data-caption');
+
+          modalVideo.src = videoSrc;
+          modalAvatar.src = avatarSrc;
+          modalUsername.textContent = username;
+          modalCaption.textContent = caption || "";
+
+          const reelId = item.getAttribute('data-id');
+          const isLiked = item.getAttribute('data-liked') === 'true';
+          const likesCount = item.getAttribute('data-likes-count');
+
+          const upModalLikeForm = document.getElementById('upModalLikeForm');
+          const upModalLikeBtn = document.getElementById('upModalLikeBtn');
+          const upModalLikesCount = document.getElementById('upModalLikesCount');
+          const upModalCommentLink = document.getElementById('upModalCommentLink');
+          const upModalCommentsCount = document.getElementById('upModalCommentsCount');
+
+          upModalLikeForm.action = `/like_unlike_post/${reelId}`;
+          upModalLikesCount.textContent = likesCount;
+          upModalCommentLink.href = `/reel_comments/${reelId}/`;
+
+          // Get comment count from the reel item overlay
+          const commentSpan = item.querySelector('.up-reel-meta a span');
+          upModalCommentsCount.textContent = commentSpan ? commentSpan.textContent.trim() : "0";
+
+          const heartIcon = modalLikeBtn.querySelector('i');
+          if (isLiked) {
+            heartIcon.setAttribute('class', 'fa-solid fa-heart');
+            heartIcon.style.setProperty('color', 'red', 'important');
+          } else {
+            heartIcon.setAttribute('class', 'fa-regular fa-heart');
+            heartIcon.style.setProperty('color', 'white', 'important');
+          }
+
+          modal.classList.add('active');
+          updateMuteUI();
+          modalVideo.play();
+        });
+      });
+
+      modalClose.addEventListener('click', () => {
+        modal.classList.remove('active');
+        modalVideo.pause();
+        modalVideo.src = "";
+      });
+
+      // Close on click outside container
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modalClose.click();
+        }
+      });
+
+      // Play/Pause on video click
+      modalVideo.addEventListener('click', () => {
+        if (modalVideo.paused) {
+          modalVideo.play();
+          modalPlayIcon.style.opacity = '0';
+        } else {
+          modalVideo.pause();
+          modalPlayIcon.style.opacity = '1';
+        }
+      });
+
+      // Mute toggle
+      modalMuteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        isMuted = !isMuted;
+        localStorage.setItem('reelsMuted', isMuted);
+        updateMuteUI();
+      });
+
+      // Progress bar
+      modalVideo.addEventListener('timeupdate', () => {
+        if (modalVideo.duration) {
+          const progress = (modalVideo.currentTime / modalVideo.duration) * 100;
+          modalProgressBar.style.width = progress + '%';
+        }
+      });
+
+    });
+  </script>
+
+</body>
+
+</html>

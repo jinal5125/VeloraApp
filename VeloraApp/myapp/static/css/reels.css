@@ -1,0 +1,252 @@
+/* ══════════════════════════════════════════════════
+   REELS PAGE — Proper Instagram Desktop Style
+══════════════════════════════════════════════════ */
+
+/* Scroll Container */
+#reels {
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  height: 100vh; /* Fixed height for the scrolling window */
+  scrollbar-width: none; 
+}
+#reels::-webkit-scrollbar {
+  display: none;
+}
+
+#reels .page-content {
+  padding: 80px 0 !important; /* Move it down from the very top */
+  max-width: 100% !important;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Center horizontally */
+}
+
+/* The Feed (Column) */
+#reels .explore-feed {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px; /* Clean gap between reels */
+  padding-bottom: 200px; /* Space at end of feed */
+}
+
+/* Individual Reel Box (Container holding video and side buttons) */
+.explore-reel-card {
+  scroll-snap-align: center; /* Snaps to exactly the center of screen */
+  scroll-snap-stop: always;
+  height: calc(100vh - 40px); /* Tall video, leaving minimal spacing at top/bottom */
+  max-height: 850px;
+  min-height: 550px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  flex-shrink: 0; /* Never squash! */
+}
+
+/* The actual Video Frame */
+.explore-reel-video-wrap {
+  height: 100%;
+  aspect-ratio: 9/16 !important; /* PERFECT INSTAGRAM RATIO */
+  background: #000;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  /* NO display:flex — children are absolutely positioned over video */
+}
+
+/* Dark gradient at bottom of video to make white text readable */
+.explore-reel-video-wrap::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40%;
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 10%, transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.explore-reel-image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important; /* Fill 9:16 perfectly */
+  cursor: pointer;
+}
+
+/* ── BOTTOM PROFILE OVERLAY (Inside Video) ── */
+.reel-user-overlay {
+  position: absolute;
+  bottom: 30px;
+  left: 16px;
+  right: 60px; /* Stay away from side buttons */
+  z-index: 10;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none; /* Let clicks pass through background */
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+.reel-user-layer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: auto; /* Clickable */
+}
+
+.reel-user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.8);
+  object-fit: cover;
+}
+
+.reel-user-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.reel-follow-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.reel-follow-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #fff;
+}
+
+.reel-caption-layer {
+  font-size: 0.9rem;
+  margin-top: 2px;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Only show 2 lines */
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+.reel-audio-layer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+/* ── PROGRESS BAR (Absolute Bottom Edge) ── */
+.explore-reel-progress-wrap {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(255,255,255,0.2);
+  z-index: 10;
+}
+.explore-reel-progress-bar {
+  height: 100%;
+  background: #fff;
+  width: 0%;
+}
+
+/* ── VOLUME BUTTON (Inside Video, Bottom Right) ── */
+.explore-reel-control-btn {
+  position: absolute;
+  bottom: 20px; /* Kept near the bottom edge */
+  right: 12px;
+  background: rgba(0,0,0,0.4);
+  color: #fff;
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  cursor: pointer;
+  z-index: 25; 
+  backdrop-filter: blur(4px);
+  transition: 0.2s;
+}
+
+/* ── PLAY ICON (Appears when paused) ── */
+.explore-reel-play-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 4.5rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.2s;
+  z-index: 10;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* ── SIDE ACTIONS (Inside Video on Right) ── */
+.explore-reel-side-actions {
+  position: absolute;
+  right: 10px;
+  bottom: 90px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: center;
+  z-index: 20;
+}
+
+.explore-reel-side-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.explore-reel-side-btn {
+  background: transparent;
+  border: none;
+  color: #fff; 
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.45rem; /* Slightly smaller for a cleaner look */
+  cursor: pointer;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+
+.explore-reel-side-action span {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+}
+
+/* Hide old sections */
+.explore-card-header, .explore-card-details, .explore-reel-overlay, .explore-reel-bottom {
+  display: none !important;
+}
+
+.sidebar {
+  z-index: 100;
+}

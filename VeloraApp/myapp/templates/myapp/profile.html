@@ -1,0 +1,502 @@
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Velora — Profile</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/userpanel.css' %}">
+  <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+</head>
+
+<body>
+
+  <!-- ══ LEFT SIDEBAR ══════════════════════════════ -->
+  <nav class="sidebar">
+    <div class="logo">vel<span>ora</span></div>
+    <div class="nav-links">
+      <a href="{% url 'home' %}" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-house"></i></span><span
+          class="nav-label">Home</span></a>
+      <a href="{% url 'search' %}" class="nav-item"><span class="nav-icon"><i
+            class="fa-solid fa-magnifying-glass"></i></span><span class="nav-label">Search</span></a>
+      <a href="{% url 'reels' %}" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-film"></i></span><span
+          class="nav-label">Reels</span></a>
+      <a href="{% url 'messages' %}" class="nav-item has-badge"><span class="nav-icon"><i
+            class="fa-solid fa-paper-plane"></i></span><span class="nav-label">Messages</span><span
+          class="badge">4</span></a>
+      <a href="{% url 'notifications' %}" class="nav-item has-badge"><span class="nav-icon"><i
+            class="fa-solid fa-bell"></i></span><span class="nav-label">Notifications</span><span
+          class="badge red">7</span></a>
+      <a href="{% url 'create' %}" class="nav-item"><span class="nav-icon"><i
+            class="fa-regular fa-square-plus"></i></span><span class="nav-label">Create</span></a>
+      <a href="{% url 'profile' %}" class="sidebar-profile-mini">
+        <span class="nav-icon">
+          {% if uid.profile_pic %}
+          <img src="{{uid.profile_pic.url}}" alt="Profile">
+          {% else %}
+          <img src="https://i.pravatar.cc/80?img=47" alt="Profile">
+          {% endif %}
+        </span>
+        <span class="nav-label">Profile</span>
+      </a>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="nav-bottom">
+      <a href="{% url 'settings' %}" class="nav-item"><span class="nav-icon"><i
+            class="fa-solid fa-gear"></i></span><span class="nav-label">Settings</span></a>
+      <a href="{% url 'logout' %}" class="nav-item logout-btn"><span class="nav-icon"><i
+            class="fa-solid fa-right-from-bracket"></i></span><span class="nav-label">Logout</span></a>
+    </div>
+  </nav>
+
+  <!-- ══ ALL PAGES ══════════════════════════════════ -->
+  <div class="pages-wrapper">
+
+    <!-- ── PROFILE ─────────────────────────────────── -->
+    <div id="profile" class="page page-full" style="display:block;">
+      <div class="profile-scroll">
+
+
+        <!-- PROFILE BODY -->
+        <div class="profile-body">
+
+          <div class="profile-left">
+            <div class="profile-av-wrap">
+              {% if uid.profile_pic %}
+              <img src="{{uid.profile_pic.url}}" class="profile-av" alt="Profile">
+              {% else %}
+              <img src="https://i.pravatar.cc/150?img=47" class="profile-av" alt="Profile">
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="profile-info">
+            <div class="profile-username-row">
+              <span class="profile-username">{{uid.username}}</span>
+            </div>
+
+            <div class="profile-fullname">{{uid.fullname}} </div>
+
+            <div class="profile-stats-row">
+              <span><strong>{{count_post}}</strong> posts</span>
+              <a href="{% url 'followers' %}"><strong>{{ count_followers }}</strong> followers</a>
+              <a href="{% url 'following' %}"><strong>{{ count_following }}</strong> following</a>
+            </div>
+
+            <div class="profile-action-btns">
+              <a href="{% url 'edit_profile' %}" class="btn-gray">Edit profile</a>
+              <a href="#" class="btn-gray">View archive</a>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- HIGHLIGHTS -->
+        <div class="highlights-section">
+
+          <div class="highlights-row">
+            <div class="highlight">
+              <div class="highlight-ring"><img
+                  src="https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=120&q=80"></div>
+              <span>Greece</span>
+            </div>
+            <div class="highlight">
+              <div class="highlight-ring"><img
+                  src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=120&q=80"></div>
+              <span>Japan</span>
+            </div>
+            <div class="highlight">
+              <div class="highlight-ring"><img
+                  src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=120&q=80"></div>
+              <span>Food</span>
+            </div>
+            <div class="highlight">
+              <div class="highlight-ring"><img
+                  src="https://images.unsplash.com/photo-1533104816931-20fa691ff6ca?w=120&q=80"></div>
+              <span>Italy</span>
+            </div>
+            <div class="highlight">
+              <div class="highlight-ring"><img
+                  src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=120&q=80"></div>
+              <span>Alps</span>
+            </div>
+            <div class="highlight">
+              <div class="highlight-ring"><img
+                  src="https://images.unsplash.com/photo-1543731068-7e0f5beff43a?w=120&q=80"></div><span>Ocean</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- TABS + GRID -->
+        <div class="profile-tabs-wrap">
+          <div class="profile-tabs">
+            <span class="ptab active" data-tab="posts"><i class="fa-solid fa-table-cells-large"></i> POSTS</span>
+            <span class="ptab" data-tab="reels"> <i class="fa-solid fa-film"></i> REELS</span>
+            <span class="ptab" data-tab="tagged"> <i class="fa-solid fa-tag"></i> TAGGED</span>
+          </div>
+        </div>
+
+        <!-- TAB CONTENT SECTIONS -->
+        <div id="posts-content" class="tab-content-item">
+          <div class="profile-grid">
+            {% for post in mypost %}
+            <div class="profile-grid-item">
+              <img src="{{post.image.url}}">
+              <div class="post-overlay">
+                <div class="overlay-item">
+                  <form method="POST" action="{% url 'like_unlike_post' post.id %}" style="display:inline;">
+                    {% csrf_token %}
+
+                    <input type="hidden" name="type" value="post">
+
+                    {% if post.id in liked_posts %}
+                    <button type="submit" style="background:none;border:none;cursor:pointer;">
+                      <i class="fa-solid fa-heart" style="color:red;"></i>
+                    </button>
+                    {% else %}
+                    <button type="submit" style="background:none;border:none;cursor:pointer;">
+                      <i class="fa-regular fa-heart"></i>
+                    </button>
+                    {% endif %}
+                  </form>
+                  <span>{{post.like_post.count}}</span>
+                </div>
+                <a href="{% url 'comments' post.id %}" class="overlay-item"
+                  style="text-decoration: none; color: inherit;">
+                  <i class="fa-solid fa-comment"></i>
+                  <span>{{ post.add_comments_set.count }}</span>
+                </a>
+              </div>
+            </div>
+            {% empty %}
+            <p style="text-align:center; grid-column: 1/-1; padding-top: 50px; color: var(--muted);">No posts yet.</p>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div id="reels-content" class="tab-content-item hidden">
+          <div class="reels-grid">
+            <!-- SINGLE DUMMY REEL (Requested) -->
+
+            {% for reel in myreel %}
+            <div class="reel-item" data-video="{{reel.video.url}}"
+              data-avatar="{% if reel.user.profile_pic %}{{reel.user.profile_pic.url}}{% else %}https://i.pravatar.cc/150?u={{reel.user.id}}{% endif %}"
+              data-username="{{reel.user.username}}" data-caption="{{reel.caption}}" data-id="{{reel.id}}"
+              data-liked="{% if reel.id in liked_reel %}true{% else %}false{% endif %}"
+              data-likes-count="{{reel.like_reel.count}}">
+              <video class="reel-video-thumb" src="{{reel.video.url}}" poster="{{reel.thumbnail.url}}"></video>
+              <div class="post-overlay">
+                <div class="overlay-item">
+                  <form method="POST" action="{% url 'like_unlike_post' reel.id %}" style="display:inline;"
+                    onclick="event.stopPropagation()">
+                    {% csrf_token %}
+                    <input type="hidden" name="type" value="reel">
+
+                    {% if reel.id in liked_reel %}
+                    <button type="submit" style="background:none;border:none;cursor:pointer;color:red;">
+                      <i class="fa-solid fa-heart"></i>
+                    </button>
+                    {% else %}
+                    <button type="submit" style="background:none;border:none;cursor:pointer;color:white;">
+                      <i class="fa-regular fa-heart"></i>
+                    </button>
+                    {% endif %}
+                  </form>
+                  <span>{{reel.like_reel.count}}</span>
+                </div>
+                <a href="{% url 'reel_comments' reel.id %}" class="overlay-item"
+                  style="text-decoration: none; color: inherit;">
+                  <i class="fa-solid fa-comment"></i>
+                  <span>{{ reel.add_comments_set.count }}</span>
+                </a>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div id="tagged-content" class="tab-content-item hidden">
+          <div class="profile-grid">
+
+            <div class="profile-grid-item" id="gt1">
+              <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80" alt="Tagged 1">
+              <div class="post-overlay">
+                <div class="overlay-item">
+                  <i class="fa-solid fa-heart"></i>
+                  <span>1.4K</span>
+                </div>
+                <div class="overlay-item">
+                  <i class="fa-solid fa-comment"></i>
+                  <span>29</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="profile-grid-item" id="gt2">
+              <img src="https://images.unsplash.com/photo-1500099817043-86d46000d58f?w=400&q=80" alt="Tagged 2">
+              <div class="post-overlay">
+                <div class="overlay-item">
+                  <i class="fa-solid fa-heart"></i>
+                  <span>3.9K</span>
+                </div>
+                <div class="overlay-item">
+                  <i class="fa-solid fa-comment"></i>
+                  <span>88</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="profile-grid-item" id="gt3">
+              <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=400&q=80" alt="Tagged 3">
+              <div class="post-overlay">
+                <div class="overlay-item">
+                  <i class="fa-solid fa-heart"></i>
+                  <span>2.2K</span>
+                </div>
+                <div class="overlay-item">
+                  <i class="fa-solid fa-comment"></i>
+                  <span>44</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="profile-grid-item" id="gt4">
+              <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&q=80" alt="Tagged 4">
+              <div class="post-overlay">
+                <div class="overlay-item">
+                  <i class="fa-solid fa-heart"></i>
+                  <span>5.1K</span>
+                </div>
+                <div class="overlay-item">
+                  <i class="fa-solid fa-comment"></i>
+                  <span>112</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div><!-- /pages-wrapper -->
+
+    <!-- ── REEL MODAL (Instagram Style) ── -->
+    <div class="reel-modal" id="reelModal">
+      <div class="reel-modal-close" id="modalClose">&times;</div>
+
+      <div class="modal-reel-container">
+        <!-- Main Video -->
+        <video class="modal-video-element" id="modalVideo" loop></video>
+
+        <!-- Play/Pause Icon Overlay -->
+        <div class="modal-play-pause-icon" id="modalPlayIcon">
+          <i class="fa-solid fa-play"></i>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="modal-progress-wrap">
+          <div class="modal-progress-bar" id="modalProgressBar"></div>
+        </div>
+
+        <!-- Mute Button -->
+        <button class="modal-mute-btn" id="modalMuteBtn">
+          <i class="fa-solid fa-volume-xmark"></i>
+        </button>
+
+        <!-- Bottom Overlay Info -->
+        <div class="modal-reel-overlay">
+          <div class="modal-user-row">
+            <img src="" alt="" class="modal-user-avatar" id="modalAvatar">
+            <span class="modal-user-name" id="modalUsername"></span>
+            <!-- <button class="modal-follow-btn">Follow</button> -->
+          </div>
+          <div class="modal-caption" id="modalCaption"></div>
+          <div class="modal-audio">
+            <i class="fa-solid fa-music"></i> <span>Original Audio</span>
+          </div>
+        </div>
+
+        <!-- Side Actions -->
+        <div class="modal-side-actions">
+          <div class="modal-action-item">
+            <form id="modalLikeForm" method="POST" action="">
+              {% csrf_token %}
+              <button type="submit" class="modal-action-btn" id="modalLikeBtn">
+                <i class="fa-regular fa-heart"></i>
+              </button>
+            </form>
+            <span id="modalLikesCount">0</span>
+          </div>
+          <div class="modal-action-item">
+            <a href="#" id="modalCommentLink" style="text-decoration: none; color: inherit;">
+              <button class="modal-action-btn"><i class="fa-regular fa-comment"></i></button>
+            </a>
+            <span id="modalCommentsCount">0</span>
+          </div>
+          <div class="modal-action-item">
+            <button class="modal-action-btn"><i class="fa-regular fa-paper-plane"></i></button>
+            <span>Share</span>
+          </div>
+          <div class="modal-action-item">
+            <button class="modal-action-btn"><i class="fa-solid fa-ellipsis"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+
+        // 🔥 TAB LOGIC (Persisted)
+        const tabs = document.querySelectorAll('.ptab');
+        const contents = document.querySelectorAll('.tab-content-item');
+
+        function activateTab(tabName) {
+          tabs.forEach(t => t.classList.remove('active'));
+          contents.forEach(c => c.classList.add('hidden'));
+
+          const selectedTab = Array.from(tabs).find(t => t.getAttribute('data-tab') === tabName);
+          const selectedContent = document.getElementById(`${tabName}-content`);
+
+          if (selectedTab && selectedContent) {
+            selectedTab.classList.add('active');
+            selectedContent.classList.remove('hidden');
+            localStorage.setItem('profileActiveTab', tabName);
+          }
+        }
+
+        // Restore tab from localStorage
+        const savedTab = localStorage.getItem('profileActiveTab');
+        if (savedTab) {
+          activateTab(savedTab);
+        }
+
+        tabs.forEach(tab => {
+          tab.addEventListener('click', () => {
+            const target = tab.getAttribute('data-tab');
+            activateTab(target);
+          });
+        });
+
+        // 🔥 REEL MODAL LOGIC
+        const reelItems = document.querySelectorAll('.reel-item');
+        const modal = document.getElementById('reelModal');
+        const modalVideo = document.getElementById('modalVideo');
+        const modalClose = document.getElementById('modalClose');
+        const modalAvatar = document.getElementById('modalAvatar');
+        const modalUsername = document.getElementById('modalUsername');
+        const modalCaption = document.getElementById('modalCaption');
+        const modalProgressBar = document.getElementById('modalProgressBar');
+        const modalMuteBtn = document.getElementById('modalMuteBtn');
+        const modalPlayIcon = document.getElementById('modalPlayIcon');
+
+        let isMuted = localStorage.getItem('reelsMuted') === 'true';
+
+        function updateMuteUI() {
+          const icon = modalMuteBtn.querySelector('i');
+          if (isMuted) {
+            icon.classList.remove('fa-volume-high');
+            icon.classList.add('fa-volume-xmark');
+            modalVideo.muted = true;
+          } else {
+            icon.classList.remove('fa-volume-xmark');
+            icon.classList.add('fa-volume-high');
+            modalVideo.muted = false;
+          }
+        }
+
+        reelItems.forEach(item => {
+          item.addEventListener('click', () => {
+            const videoSrc = item.getAttribute('data-video');
+            const avatarSrc = item.getAttribute('data-avatar');
+            const username = item.getAttribute('data-username');
+            const caption = item.getAttribute('data-caption');
+
+            modalVideo.src = videoSrc;
+            modalAvatar.src = avatarSrc;
+            modalUsername.textContent = username;
+            modalCaption.textContent = caption || "";
+
+            const reelId = item.getAttribute('data-id');
+            const isLiked = item.getAttribute('data-liked') === 'true';
+            const likesCount = item.getAttribute('data-likes-count');
+
+            const modalLikeForm = document.getElementById('modalLikeForm');
+            const modalLikeBtn = document.getElementById('modalLikeBtn');
+            const modalLikesCount = document.getElementById('modalLikesCount');
+            const modalCommentLink = document.getElementById('modalCommentLink');
+            const modalCommentsCount = document.getElementById('modalCommentsCount');
+
+            modalLikeForm.action = `/like_unlike_post/${reelId}`;
+            modalLikesCount.textContent = likesCount;
+            modalCommentLink.href = `/reel_comments/${reelId}/`;
+
+            // Get comment count from the reel-item overlay
+            const commentSpan = item.querySelector('.overlay-item:last-child span');
+            modalCommentsCount.textContent = commentSpan ? commentSpan.textContent.trim() : "0";
+
+            const heartIcon = modalLikeBtn.querySelector('i');
+            if (isLiked) {
+              heartIcon.setAttribute('class', 'fa-solid fa-heart');
+              heartIcon.style.setProperty('color', 'red', 'important');
+            } else {
+              heartIcon.setAttribute('class', 'fa-regular fa-heart');
+              heartIcon.style.setProperty('color', 'white', 'important');
+            }
+
+            modal.classList.add('active');
+            updateMuteUI();
+            modalVideo.play();
+          });
+        });
+
+        modalClose.addEventListener('click', () => {
+          modal.classList.remove('active');
+          modalVideo.pause();
+          modalVideo.src = "";
+        });
+
+        // Close on click outside container
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            modalClose.click();
+          }
+        });
+
+        // Play/Pause on video click
+        modalVideo.addEventListener('click', () => {
+          if (modalVideo.paused) {
+            modalVideo.play();
+            modalPlayIcon.style.opacity = '0';
+          } else {
+            modalVideo.pause();
+            modalPlayIcon.style.opacity = '1';
+          }
+        });
+
+        // Mute toggle
+        modalMuteBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          isMuted = !isMuted;
+          localStorage.setItem('reelsMuted', isMuted);
+          updateMuteUI();
+        });
+
+        // Progress bar
+        modalVideo.addEventListener('timeupdate', () => {
+          if (modalVideo.duration) {
+            const progress = (modalVideo.currentTime / modalVideo.duration) * 100;
+            modalProgressBar.style.width = progress + '%';
+          }
+        });
+
+      });
+    </script>
+</body>
+
+</html>

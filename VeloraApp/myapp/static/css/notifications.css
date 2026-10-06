@@ -1,0 +1,159 @@
+/* ══════════════════════════════════════════════════
+   NOTIFICATIONS PAGE
+══════════════════════════════════════════════════ */
+
+.notif-group-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  margin: 6px 0 12px;
+}
+
+.notif-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 24px;
+}
+
+.notif-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: var(--r-md);
+  transition: var(--t);
+}
+
+.notif-item:hover {
+  background: var(--bg3);
+}
+
+.notif-item.unread {
+  background: rgba(184, 92, 42, 0.05);
+}
+
+/* ───── Avatar ───── */
+
+.notif-av {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1.5px solid var(--border);
+}
+
+.notif-av img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.notif-av.heart-bg {
+  background: #fde8ef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent2);
+  font-size: 1.1rem;
+}
+
+.notif-av.follow-bg {
+  background: #e8f4f1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--green);
+  font-size: 1rem;
+}
+
+/* ───── Content ───── */
+
+.notif-body {
+  flex: 1;
+  font-size: 0.95rem;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.notif-name {
+  font-weight: 600;
+}
+
+.notif-time {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-left: 5px;
+}
+
+/* ───── Right Side (Button/Image) ───── */
+
+.notif-thumb {
+  height: 48px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  overflow: visible;
+}
+
+.notif-thumb img {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--r-sm);
+  object-fit: cover;
+}
+
+/* ───── Follow / Following Button ───── */
+
+.follow-btn {
+  display: inline-block;
+  white-space: nowrap;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  text-decoration: none;
+
+  border: 1.5px solid #c96a2b;
+  background: transparent;
+  color: #c96a2b;
+  font-weight: 500;
+  transition: 0.2s ease;
+}
+
+.follow-btn:hover {
+  background: #c96a2b;
+  color: #fff;
+}
+
+.following-btn {
+  display: inline-block;
+  white-space: nowrap;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+
+  border: 1.5px solid #c96a2b;
+  background: transparent;
+  color: #c96a2b;
+  font-weight: 500;
+  cursor: default;
+}
+
+/* ───── Page Alignment ───── */
+
+#notifications {
+  align-self: flex-start;
+  min-height: auto;
+}
+
+#notifications .page-content {
+  max-width: 620px;
+  margin: 0 auto;
+  width: 100%;
+}

@@ -1,0 +1,283 @@
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Velora — Reels Feed</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/userpanel.css' %}">
+  <link rel="stylesheet" href="{% static 'css/explore.css' %}">
+  <link rel="stylesheet" href="{% static 'css/reels.css' %}">
+</head>
+
+<body>
+  <!-- ══ LEFT SIDEBAR ══════════════════════════════ -->
+  <nav class="sidebar">
+    <div class="logo">vel<span>ora</span></div>
+    <div class="nav-links">
+      <a href="{% url 'home' %}" class="nav-item">
+        <span class="nav-icon"><i class="fa-solid fa-house"></i></span>
+        <span class="nav-label">Home</span>
+      </a>
+      <a href="{% url 'search' %}" class="nav-item">
+        <span class="nav-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+        <span class="nav-label">Search</span>
+      </a>
+      <a href="{% url 'reels' %}" class="nav-item">
+        <span class="nav-icon"><i class="fa-solid fa-film"></i></span>
+        <span class="nav-label">Reels</span>
+      </a>
+      <a href="{% url 'messages' %}" class="nav-item has-badge">
+        <span class="nav-icon"><i class="fa-solid fa-paper-plane"></i></span>
+        <span class="nav-label">Messages</span>
+        <span class="badge">4</span>
+      </a>
+      <a href="{% url 'notifications' %}" class="nav-item has-badge">
+        <span class="nav-icon"><i class="fa-solid fa-bell"></i></span>
+        <span class="nav-label">Notifications</span>
+        <span class="badge red">7</span>
+      </a>
+      <a href="{% url 'create' %}" class="nav-item">
+        <span class="nav-icon"><i class="fa-regular fa-square-plus"></i></span>
+        <span class="nav-label">Create</span>
+      </a>
+      <a href="{% url 'profile' %}" class="sidebar-profile-mini">
+        <span class="nav-icon">
+          {% if uid.profile_pic %}
+          <img src="{{uid.profile_pic.url}}" alt="Profile">
+          {% else %}
+          <img src="https://i.pravatar.cc/80?img=47" alt="Profile">
+          {% endif %}
+        </span>
+        <span class="nav-label">Profile</span>
+      </a>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="nav-bottom">
+      <a href="{% url 'settings' %}" class="nav-item">
+        <span class="nav-icon"><i class="fa-solid fa-gear"></i></span>
+        <span class="nav-label">Settings</span>
+      </a>
+      <a href="{% url 'logout' %}" class="nav-item logout-btn">
+        <span class="nav-icon"><i class="fa-solid fa-right-from-bracket"></i></span>
+        <span class="nav-label">Logout</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- ══ ALL PAGES ══════════════════════════════════ -->
+  <div class="pages-wrapper">
+    <!-- ── REELS ─────────────────────────────────── -->
+    <div id="reels" class="page page-full" style="display:block;">
+      <div class="page-content">
+        <div class="explore-feed" id="exploreFeed">
+          {% for reel in all_reels %}
+          <div class="explore-reel-card">
+
+            <!-- Video Container Layer (Main Instagram Frame) -->
+            <div class="explore-reel-video-wrap">
+              <video class="explore-reel-image" loop muted playsinline>
+                <source src="{{reel.video.url}}" type="video/mp4">
+              </video>
+
+              <!-- Mute / Unmute Button inside video -->
+              <button class="explore-reel-control-btn" aria-label="Volume">
+                <i class="fa-solid fa-volume-xmark"></i>
+              </button>
+
+              <!-- Center Play Icon (visible when paused) -->
+              <div class="explore-reel-play-icon">
+                <i class="fa-solid fa-play"></i>
+              </div>
+
+              <!-- Bottom Profile Overlay -->
+              <div class="reel-user-overlay">
+                <div class="reel-user-layer">
+                  <img src="{{reel.user.profile_pic.url}}" alt="{{reel.user.username}}" class="reel-user-avatar">
+                  <span class="reel-user-name">{{reel.user.username}}</span>
+                  {% if reel.user != uid %}
+                  <a href="{% url 'follow_unfollow' reel.user.id %}" class="reel-follow-btn">Follow</a>
+                  {% endif %}
+                </div>
+                <div class="reel-caption-layer">
+                  {{reel.caption}}
+                </div>
+                <div class="reel-audio-layer">
+                  <i class="fa-solid fa-music"></i> <span>Original Audio - {{reel.user.username}}</span>
+                </div>
+              </div>
+
+              <!-- Side Action Buttons (all 4 wrapped in .explore-reel-side-actions) -->
+              <div class="explore-reel-side-actions">
+
+                <div class="explore-reel-side-action">
+                  <form method="POST" action="{% url 'like_unlike_post' reel.id %}">
+                    {% csrf_token %}
+
+                    <input type="hidden" name="type" value="reel">
+
+                    {% if reel.id in liked_reels %}
+                    <button type="submit" class="explore-reel-side-btn like-btn">
+                      <i class="fa-solid fa-heart" style="color:red;"></i>
+                    </button>
+                    {% else %}
+                    <button type="submit" class="explore-reel-side-btn like-btn">
+                      <i class="fa-regular fa-heart"></i>
+                    </button>
+                    {% endif %}
+                  </form>
+                  <span>{{reel.like_reel.count}}</span>
+                </div>
+
+                <div class="explore-reel-side-action">
+                  <a href="{% url 'reel_comments' reel.id %}" style="text-decoration: none; color: inherit;">
+                    <button class="explore-reel-side-btn" aria-label="Comment"><i
+                        class="fa-regular fa-comment"></i></button>
+                  </a>
+                  <span>{{ reel.add_comments_set.count }}</span>
+                </div>
+
+                <div class="explore-reel-side-action">
+                  <button class="explore-reel-side-btn" aria-label="Share"><i
+                      class="fa-regular fa-paper-plane"></i></button>
+                  <span>Share</span>
+                </div>
+
+                <div class="explore-reel-side-action">
+                  <button class="explore-reel-side-btn" aria-label="More"><i class="fa-solid fa-ellipsis"></i></button>
+                </div>
+
+              </div>
+
+              <!-- Progress Bar at Absolute Bottom Edge -->
+              <div class="explore-reel-progress-wrap">
+                <div class="explore-reel-progress-bar"></div>
+              </div>
+            </div>
+
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div><!-- /pages-wrapper -->
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const reelsMedia = document.querySelectorAll('.explore-reel-video-wrap');
+      const videos = [];
+      const volumeIcons = [];
+      let isGlobalMuted = localStorage.getItem('reelsMuted') !== 'false';
+
+      const syncVolume = (muted) => {
+        isGlobalMuted = muted;
+        localStorage.setItem('reelsMuted', isGlobalMuted);
+        videos.forEach(v => v.muted = isGlobalMuted);
+        volumeIcons.forEach(icon => {
+          if (isGlobalMuted) {
+            icon.classList.remove('fa-volume-high', 'fa-volume-up');
+            icon.classList.add('fa-volume-xmark');
+          } else {
+            icon.classList.remove('fa-volume-xmark');
+            icon.classList.add('fa-volume-high');
+          }
+        });
+      };
+
+      reelsMedia.forEach(media => {
+        const video = media.querySelector('video');
+        const playIcon = media.querySelector('.explore-reel-play-icon');
+        const volumeBtn = media.querySelector('.explore-reel-control-btn[aria-label="Volume"]');
+        const progressBar = media.querySelector('.explore-reel-progress-bar');
+        const videoContainer = media; // The wrapper itself
+
+        if (video) {
+          videos.push(video);
+          // Set initial state
+          video.muted = isGlobalMuted;
+
+          // Make the whole video wrapper clickable to play/pause
+          videoContainer.addEventListener('click', (e) => {
+            // Ignore if clicking volume button, profile elements, etc.
+            if (e.target.closest('.explore-reel-control-btn') || e.target.closest('.reel-user-overlay')) return;
+
+            if (video.paused) video.play();
+            else video.pause();
+          });
+
+          if (playIcon) {
+            video.addEventListener('play', () => {
+              playIcon.style.opacity = '0';
+            });
+            video.addEventListener('pause', () => {
+              playIcon.style.opacity = '1';
+            });
+          }
+
+          if (volumeBtn) {
+            const volumeIcon = volumeBtn.querySelector('i');
+            volumeIcons.push(volumeIcon);
+
+            if (isGlobalMuted) {
+              volumeIcon.classList.remove('fa-volume-high', 'fa-volume-up');
+              volumeIcon.classList.add('fa-volume-xmark');
+            } else {
+              volumeIcon.classList.remove('fa-volume-xmark');
+              volumeIcon.classList.add('fa-volume-high');
+            }
+
+            volumeBtn.addEventListener('click', (e) => {
+              e.preventDefault(); e.stopPropagation();
+              syncVolume(!isGlobalMuted);
+            });
+          }
+
+          video.addEventListener('timeupdate', () => {
+            if (progressBar && video.duration) {
+              progressBar.style.width = ((video.currentTime / video.duration) * 100) + '%';
+            }
+          });
+        }
+      });
+
+      // --- Intersection Observer for Auto-play on Scroll ---
+      const observerOptions = {
+        root: null, // use viewport
+        rootMargin: '0px',
+        threshold: 0.7 // video must be 70% visible to play
+      };
+
+      const observerCallback = (entries) => {
+        entries.forEach(entry => {
+          const video = entry.target.querySelector('video');
+          if (!video) return;
+
+          if (entry.isIntersecting) {
+            // Pause all other videos first to ensure only one plays
+            videos.forEach(v => {
+              if (v !== video) v.pause();
+            });
+
+            // Play current video
+            video.play().catch(error => {
+              console.log("Autoplay prevented:", error);
+            });
+          } else {
+            // Pause when leaving viewport
+            video.pause();
+          }
+        });
+      };
+
+      const observer = new IntersectionObserver(observerCallback, observerOptions);
+      const reelCards = document.querySelectorAll('.explore-reel-card');
+      reelCards.forEach(card => observer.observe(card));
+    });
+  </script>
+</body>
+
+</html>

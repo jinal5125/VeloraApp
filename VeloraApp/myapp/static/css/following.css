@@ -1,0 +1,209 @@
+/* ── FOLLOWING PAGE STYLES (Light Theme) ─────────────────── */
+
+/* Following Search Box */
+.following-search-container {
+    background: var(--bg2);
+    border-radius: var(--r-md);
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 30px;
+    border: 1px solid var(--border);
+    transition: var(--t);
+}
+
+.following-search-container:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(184, 92, 42, 0.08);
+}
+
+.following-search-container i {
+    color: var(--muted);
+    font-size: 16px;
+}
+
+.following-search-container input {
+    background: none;
+    border: none;
+    color: var(--text);
+    font-size: 1rem;
+    width: 100%;
+    outline: none;
+    font-family: 'Outfit', sans-serif;
+}
+
+.following-search-container input::placeholder {
+    color: var(--muted);
+}
+
+/* Following List */
+.following-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.following-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--bg2);
+    border-radius: var(--r-md);
+    border: 1px solid var(--border);
+    transition: var(--t);
+}
+
+.following-item:hover {
+    background: var(--bg3);
+    transform: translateX(4px);
+}
+
+.following-user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.following-av {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--accent);
+    padding: 2px;
+}
+
+.following-av img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.following-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.following-username {
+    color: var(--text);
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.following-name {
+    color: var(--muted);
+    font-size: 0.8rem;
+}
+
+/* ───── Follow / Following Buttons ───── */
+
+.follow-btn {
+    display: inline-block;
+    white-space: nowrap;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    text-decoration: none;
+
+    border: 1.5px solid #c96a2b;
+    background: transparent;
+    color: #c96a2b;
+    font-weight: 500;
+    transition: 0.2s ease;
+    margin-right: 8px;
+}
+
+.follow-btn:hover {
+    background: #c96a2b;
+    color: #fff;
+}
+
+.following-btn {
+    display: inline-block;
+    white-space: nowrap;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+
+    border: 1.5px solid #c96a2b;
+    background: transparent;
+    color: #c96a2b;
+    font-weight: 500;
+    cursor: default;
+    margin-right: 8px;
+}
+
+/* ───── Remove Button ───── */
+
+.remove-icon-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: var(--t);
+    padding: 6px;
+    margin-right: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.remove-icon-btn:hover {
+    color: var(--text);
+}
+
+/* ───── Dummy Posts Grid ───── */
+
+.following-posts-grid {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.dummy-post {
+    background: var(--bg2);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+}
+
+.dummy-post-img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+}
+
+.dummy-post-info {
+    padding: 15px;
+}
+
+.dummy-post-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.dummy-post-user img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+}
+
+.dummy-post-user span {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.dummy-post-text {
+    color: var(--muted);
+    font-size: 0.88rem;
+    line-height: 1.5;
+}

@@ -1,0 +1,11 @@
+#create {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+#create .page-content.narrow {
+  margin: 0 auto;
+  width: 100%;
+  padding-top: 0;
+}

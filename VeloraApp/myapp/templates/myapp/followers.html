@@ -1,0 +1,107 @@
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Velora — Followers</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/userpanel.css' %}">
+  <link rel="stylesheet" href="{% static 'css/following.css' %}">
+</head>
+
+<body>
+
+  <!-- ══ LEFT SIDEBAR ══════════════════════════════ -->
+  <nav class="sidebar">
+    <div class="logo">vel<span>ora</span></div>
+    <div class="nav-links">
+      <a href="{% url 'home' %}" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-house"></i></span><span
+          class="nav-label">Home</span></a>
+      <a href="{% url 'search' %}" class="nav-item"><span class="nav-icon"><i
+            class="fa-solid fa-magnifying-glass"></i></span><span class="nav-label">Search</span></a>
+      <a href="{% url 'reels' %}" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-film"></i></span><span
+          class="nav-label">Reels</span></a>
+      <a href="{% url 'messages' %}" class="nav-item has-badge"><span class="nav-icon"><i
+            class="fa-solid fa-paper-plane"></i></span><span class="nav-label">Messages</span><span
+          class="badge">4</span></a>
+      <a href="{% url 'notifications' %}" class="nav-item has-badge"><span class="nav-icon"><i
+            class="fa-solid fa-bell"></i></span><span class="nav-label">Notifications</span><span
+          class="badge red">7</span></a>
+      <a href="{% url 'create' %}" class="nav-item"><span class="nav-icon"><i
+            class="fa-regular fa-square-plus"></i></span><span class="nav-label">Create</span></a>
+      <a href="{% url 'profile' %}" class="sidebar-profile-mini">
+        <span class="nav-icon">
+          {% if uid.profile_pic %}
+          <img src="{{uid.profile_pic.url}}" alt="Profile">
+          {% else %}
+          <img src="https://i.pravatar.cc/80?img=47" alt="Profile">
+          {% endif %}
+        </span>
+        <span class="nav-label">Profile</span>
+      </a>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="nav-bottom">
+      <a href="{% url 'settings' %}" class="nav-item"><span class="nav-icon"><i
+            class="fa-solid fa-gear"></i></span><span class="nav-label">Settings</span></a>
+      <a href="{% url 'logout' %}" class="nav-item logout-btn"><span class="nav-icon"><i
+            class="fa-solid fa-right-from-bracket"></i></span><span class="nav-label">Logout</span></a>
+    </div>
+  </nav>
+
+  <!-- ══ ALL PAGES ══════════════════════════════════ -->
+  <div class="pages-wrapper">
+
+    <!-- ── FOLLOWERS PAGE ───────────────────────────── -->
+    <div id="followers" class="page page-full" style="display:block;">
+        <div class="page-content" style="max-width: 600px; margin: 0 auto; padding-top: 100px;">
+          <div class="page-header-row">
+            <a href="{% url 'profile' %}" class="back-btn"><i class="fa-solid fa-arrow-left"></i></a>
+            <div class="page-header"><i class="fa-solid fa-users"></i> Followers</div>
+          </div>
+
+          <!-- Search Box -->
+          <form method="get">
+            <div class="following-search-container">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" name="q" placeholder="Search followers..." value="{{ request.GET.q }}">
+            </div>
+          </form>
+
+          <!-- Followers List -->
+          <div class="following-list">
+            {% for followers in followers_list %}
+            <div class="following-item">
+              <a href="{% url 'user_profile' followers.following.id %}" class="following-user-info" style="text-decoration: none; color: inherit;">
+                <div class="following-av"><img src="{{ followers.following.profile_pic.url }}"></div>
+                <div class="following-details">
+                  <span class="following-username">{{ followers.following.username }}</span>
+                  <span class="following-name">{{ followers.following.fullname }}</span>
+                </div>
+              </a>
+              <div>
+                {% if followers.following.id not in my_following %}
+                  <a href="{% url 'follow_unfollow' pk=followers.following.id %}" class="follow-btn">
+                    Follow back
+                  </a>
+                {% endif %}
+
+                <a href="{% url 'remove_followers' pk=followers.id %}"  style="text-decoration: none;" class="remove-icon-btn">
+                  <i class="fa-solid fa-times"></i>
+                </a>
+              </div>
+            </div>
+            {% endfor %}
+
+          </div>
+
+    </div>
+
+  </div><!-- /pages-wrapper -->
+</body>
+
+</html>

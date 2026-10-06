@@ -1,0 +1,149 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instagram Comment Modal • Velora</title>
+  <!-- Google Fonts & FontAwesome -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Existing Sidebar Styling -->
+  <link rel="stylesheet" href="{% static 'css/userpanel.css' %}">
+  <!-- Comment Modal Styling -->
+  <link rel="stylesheet" href="{% static 'css/comments.css' %}">
+</head>
+
+<body>
+
+  <!-- ══ REAL WEBSITE UI (Piche dikhne ke liye copy kiya gaya) ════════ -->
+  <div class="website-bg-mock">
+    <!-- Copy of your Sidebar -->
+    <nav class="sidebar">
+      <div class="logo">vel<span>ora</span></div>
+      <div class="nav-links">
+        <a href="#" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-house"></i></span><span
+            class="nav-label">Home</span></a>
+        <a href="#" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-magnifying-glass"></i></span><span
+            class="nav-label">Search</span></a>
+        <a href="#" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-film"></i></span><span
+            class="nav-label">Reels</span></a>
+        <a href="#" class="nav-item has-badge"><span class="nav-icon"><i
+              class="fa-solid fa-paper-plane"></i></span><span class="nav-label">Messages</span><span
+            class="badge">4</span></a>
+        <a href="#" class="nav-item has-badge"><span class="nav-icon"><i class="fa-solid fa-bell"></i></span><span
+            class="nav-label">Notifications</span><span class="badge red">7</span></a>
+        <a href="#" class="nav-item"><span class="nav-icon"><i class="fa-regular fa-square-plus"></i></span><span
+            class="nav-label">Create</span></a>
+        <a href="#" class="sidebar-profile-mini">
+          <span class="nav-icon"><img
+              src="{% if uid.profile_pic %}{{uid.profile_pic.url}}{% else %}/media/images/boy.png{% endif %}"
+              alt="Profile"></span>
+          <span class="nav-label">Profile</span>
+        </a>
+      </div>
+      <div class="sidebar-divider"></div>
+      <div class="nav-bottom">
+        <a href="#" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-gear"></i></span><span
+            class="nav-label">Settings</span></a>
+        <a href="#" class="nav-item logout-btn"><span class="nav-icon"><i
+              class="fa-solid fa-right-from-bracket"></i></span><span class="nav-label">Logout</span></a>
+      </div>
+    </nav>
+
+    <!-- Mock Feed -->
+    <div class="feed-mock">
+      <div class="post-mock"></div>
+      <div class="post-mock"></div>
+    </div>
+  </div>
+
+  <!-- ══ MODAL OVERLAY (Instagram Style) ═════════════════════════════ -->
+  <div class="modal-overlay">
+
+    <div class="close-icon" onclick="window.history.back()">&times;</div>
+
+    <div class="modal-container">
+
+      <!-- LEFT: Image Area -->
+      <div class="modal-media">
+        {% if type == "post" %}
+          <img src="{{ obj.image.url }}" alt="Post">
+        {% else %}
+          <video src="{{ obj.video.url }}" controls autoplay loop style="width:100%; height:100%; object-fit: cover;"></video>
+        {% endif %}
+      </div>
+
+      <!-- RIGHT: Comments Area -->
+      <div class="modal-comments">
+
+        <!-- Modal Header -->
+        <header class="m-header">
+          <div class="m-user">
+            <img src="{% if obj.user.profile_pic %}{{ obj.user.profile_pic.url }}{% else %}{% static 'images/boy.png' %}{% endif %}" class="m-av">
+            <span class="m-un">{{ obj.user.username }}</span>
+            <i class="fa-solid fa-circle-check" style="color: #0095f6; font-size: 12px;"></i>
+          </div>
+          <i class="fa-solid fa-ellipsis" style="cursor:pointer;"></i>
+        </header>
+
+        <!-- Comments List -->
+        <div class="m-comment-list">
+          <!-- Caption -->
+          <div class="m-comment">
+            <img src="{% if obj.user.profile_pic %}{{ obj.user.profile_pic.url }}{% else %}{% static 'images/boy.png' %}{% endif %}" class="m-av">
+            <div class="m-text">
+              <strong>{{ obj.user.username }}</strong> {{ obj.caption }}
+              <div class="m-meta"><span>{{ obj.whenpublished }}</span></div>
+            </div>
+          </div>
+
+          <!-- Dynamic Comments -->
+          {% for comment in all_comments %}
+          <div class="m-comment">
+            <img src="{% if comment.user_fk.profile_pic %}{{ comment.user_fk.profile_pic.url }}{% else %}{% static 'images/boy.png' %}{% endif %}" class="m-av">
+            <div class="m-text">
+              <strong>{{ comment.user_fk.username }}</strong> {{ comment.comment_text }}
+              <div class="m-meta"><span>{{ comment.created_at|timesince }} ago</span></div>
+            </div>
+            <i class="fa-regular fa-heart m-like-icon"></i>
+          </div>
+          {% empty %}
+          <div style="text-align: center; padding-top: 50px; color: #8e8e8e;">
+            <p>No comments yet. Be the first to comment!</p>
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- Action Section -->
+        <div class="m-actions">
+          <div class="m-icons-row">
+            <i class="fa-regular fa-heart"></i>
+            <i class="fa-regular fa-comment"></i>
+            <i class="fa-regular fa-paper-plane"></i>
+            <i class="fa-regular fa-bookmark" style="margin-left: auto;"></i>
+          </div>
+          <div class="m-likes-bold">{% if type == "post" %}{{ obj.like_post.count }}{% else %}{{ obj.like_reel.count }}{% endif %} likes</div>
+          <div class="m-time">{{ obj.whenpublished }}</div>
+        </div>
+
+        <!-- Input Area -->
+        <form method="POST" class="m-input-area">
+          {% csrf_token %}
+          <i class="fa-regular fa-face-smile" style="font-size: 24px; cursor: pointer;"></i>
+          <input type="text" name="comment_text" placeholder="Add a comment..." required>
+          <button type="submit" class="m-post-btn">Post</button>
+        </form>
+
+      </div>
+
+    </div>
+  </div>
+
+</body>
+
+</html>

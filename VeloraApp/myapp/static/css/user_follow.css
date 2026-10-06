@@ -1,0 +1,334 @@
+/* ══════════════════════════════════════════════════
+   USER FOLLOWERS / FOLLOWING PAGE
+   Velora — Instagram-Style Clean List
+   Pure HTML + CSS — No JavaScript
+══════════════════════════════════════════════════ */
+
+/* ── MAIN LAYOUT ────────────────────────────────── */
+.uf-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  align-items: center;
+  padding-top: 28px;
+}
+
+
+/* ══════════════════════════════════════════════════
+   TOP HEADER BAR  (← username)
+══════════════════════════════════════════════════ */
+.uf-topbar {
+  display: flex;
+  align-items: center;
+  height: 56px;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2);
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 600px;
+}
+
+.uf-topbar-back {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 1.2rem;
+  border-radius: 50%;
+  transition: var(--t);
+  margin-right: 16px;
+  flex-shrink: 0;
+}
+.uf-topbar-back:hover {
+  background: var(--bg3);
+}
+
+.uf-topbar-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+
+/* ══════════════════════════════════════════════════
+   TABS BAR  (Followers | Following)
+══════════════════════════════════════════════════ */
+.uf-tabs-bar {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2);
+  flex-shrink: 0;
+  width: 100%;
+  max-width: 600px;
+}
+
+.uf-tab {
+  flex: 1;
+  text-align: center;
+  padding: 16px 0;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-decoration: none;
+  position: relative;
+  transition: color 0.2s ease;
+}
+.uf-tab:hover {
+  color: var(--text);
+}
+
+.uf-tab.active {
+  color: var(--text);
+}
+.uf-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  background: var(--text);
+}
+
+
+/* ══════════════════════════════════════════════════
+   SCROLLABLE LIST AREA
+══════════════════════════════════════════════════ */
+.uf-content {
+  flex: 1;
+  overflow-y: auto;
+  background: var(--bg);
+  width: 100%;
+  max-width: 600px;
+}
+
+
+/* ══════════════════════════════════════════════════
+   SEARCH BAR
+══════════════════════════════════════════════════ */
+.uf-search-wrap {
+  padding: 12px 16px;
+  background: var(--bg);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.uf-search-box {
+  display: flex;
+  align-items: center;
+  background: var(--bg3);
+  border-radius: 10px;
+  padding: 0 14px;
+  height: 38px;
+}
+
+.uf-search-box i {
+  color: var(--muted);
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.uf-search-box input {
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.9rem;
+  width: 100%;
+  padding: 0 10px;
+}
+.uf-search-box input::placeholder {
+  color: var(--muted);
+}
+
+
+/* ══════════════════════════════════════════════════
+   USER LIST
+══════════════════════════════════════════════════ */
+.uf-list {
+  padding: 4px 0;
+}
+
+.uf-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  transition: background 0.15s ease;
+}
+.uf-item:hover {
+  background: var(--bg3);
+}
+
+/* ── AVATAR ─────────────────────────────────────── */
+.uf-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  margin-right: 14px;
+}
+.uf-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Story ring  (Instagram red‐orange ring) */
+.uf-avatar.story {
+  padding: 2.5px;
+  background: linear-gradient(135deg, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
+  border-radius: 50%;
+}
+.uf-avatar.story img {
+  border-radius: 50%;
+  border: 2px solid var(--bg);
+}
+
+/* ── USER INFO ──────────────────────────────────── */
+.uf-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.uf-name-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.uf-uname {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.uf-verified-icon {
+  color: #3897f0;
+  font-size: 0.75rem;
+}
+
+.uf-fname {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+/* ══════════════════════════════════════════════════
+   BUTTONS (Instagram Style)
+══════════════════════════════════════════════════ */
+
+/* "Follow" Button — accent filled */
+.uf-btn-follow {
+  display: inline-block;
+  padding: 7px 24px;
+  border-radius: 8px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--t);
+  white-space: nowrap;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+}
+.uf-btn-follow:hover {
+  background: #9c4d23;
+}
+
+/* "Following" Button — grey bg */
+.uf-btn-following {
+  display: inline-block;
+  padding: 7px 20px;
+  border-radius: 8px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--t);
+  white-space: nowrap;
+  border: none;
+  background: var(--bg3);
+  color: var(--text);
+}
+.uf-btn-following:hover {
+  background: var(--border);
+}
+
+/* "Remove" button (for followers page) */
+.uf-btn-remove {
+  display: inline-block;
+  padding: 7px 20px;
+  border-radius: 8px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--t);
+  white-space: nowrap;
+  border: none;
+  background: var(--bg3);
+  color: var(--text);
+}
+.uf-btn-remove:hover {
+  background: var(--border);
+}
+
+/* ── BUTTON CONTAINER ───────────────────────────── */
+.uf-btn-wrap {
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+
+
+/* ══════════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .uf-topbar {
+    padding: 0 14px;
+  }
+
+  .uf-item {
+    padding: 8px 14px;
+  }
+
+  .uf-avatar {
+    width: 42px;
+    height: 42px;
+  }
+}
+
+@media (max-width: 500px) {
+  .uf-topbar-username {
+    font-size: 1rem;
+  }
+
+  .uf-btn-follow,
+  .uf-btn-following,
+  .uf-btn-remove {
+    padding: 6px 16px;
+    font-size: 0.8rem;
+  }
+}

@@ -1,0 +1,196 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Story</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/view_story.css' %}">
+</head>
+<body>
+
+    <div class="story-container">
+        <!-- Progress Bars -->
+        <div class="progress-container">
+            {% for story in stories %}
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-{{ forloop.counter0 }}"></div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Header -->
+        <div class="story-header">
+            <a href="{% url 'user_profile' target_user.id %}" class="user-info">
+                <img src="{% if target_user.profile_pic %}{{ target_user.profile_pic.url }}{% else %}/media/images/boy.png{% endif %}" alt="Profile">
+                <span>{{ target_user.username }}</span>
+            </a>
+            <div class="header-icons">
+                <i class="fa-solid fa-pause" id="play-pause-btn" onclick="togglePlayPause()"></i>
+                <i class="fa-solid fa-volume-high" id="mute-btn" onclick="toggleMute()"></i>
+                <i class="fa-solid fa-ellipsis"></i>
+                <a href="{% url 'home' %}" class="close-btn"><i class="fa-solid fa-xmark"></i></a>
+            </div>
+        </div>
+
+        <!-- Story Content -->
+        <div class="story-content">
+            <div class="nav-area nav-left" onclick="prevStory()"></div>
+            <div class="nav-area nav-right" onclick="nextStory()"></div>
+
+            {% for story in stories %}
+            <div class="story-item" id="story-{{ forloop.counter0 }}">
+                {% if story.image %}
+                    <img src="{{ story.image.url }}" alt="Story Image">
+                {% endif %}
+                {% if story.music %}
+                    <audio id="audio-{{ forloop.counter0 }}" src="{{ story.music.url }}" loop></audio>
+                {% endif %}
+                {% if story.caption %}
+                    <div class="story-caption">{{ story.caption }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Footer / Reply Bar -->
+        <div class="story-footer">
+            <div class="reply-box">
+                <input type="text" placeholder="Reply to {{ target_user.username }}...">
+            </div>
+            <div class="footer-icons">
+                <i class="fa-regular fa-heart"></i>
+                <i class="fa-regular fa-paper-plane"></i>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const totalStories = {{ stories|length }};
+        let currentIndex = 0;
+        const STORY_DURATION = 5000; // 5 seconds per story
+        let progressInterval;
+        let startTime;
+        let pausedElapsedTime = 0;
+        let isPaused = false;
+        let isMuted = false;
+
+        function toggleMute() {
+            isMuted = !isMuted;
+            const muteBtn = document.getElementById('mute-btn');
+            if (isMuted) {
+                muteBtn.classList.remove('fa-volume-high');
+                muteBtn.classList.add('fa-volume-xmark');
+            } else {
+                muteBtn.classList.remove('fa-volume-xmark');
+                muteBtn.classList.add('fa-volume-high');
+            }
+            
+            document.querySelectorAll('audio').forEach(audio => {
+                audio.muted = isMuted;
+            });
+        }
+
+        function togglePlayPause() {
+            isPaused = !isPaused;
+            const playPauseBtn = document.getElementById('play-pause-btn');
+            const currentAudio = document.getElementById('audio-' + currentIndex);
+
+            if (isPaused) {
+                playPauseBtn.classList.remove('fa-pause');
+                playPauseBtn.classList.add('fa-play');
+                
+                if (currentAudio) currentAudio.pause();
+                
+                clearInterval(progressInterval);
+                pausedElapsedTime = Date.now() - startTime;
+            } else {
+                playPauseBtn.classList.remove('fa-play');
+                playPauseBtn.classList.add('fa-pause');
+                
+                if (currentAudio) currentAudio.play().catch(e => console.log(e));
+                
+                startTime = Date.now() - pausedElapsedTime;
+                startProgressInterval(currentIndex);
+            }
+        }
+
+        function startProgressInterval(index) {
+            clearInterval(progressInterval);
+            progressInterval = setInterval(() => {
+                let elapsedTime = Date.now() - startTime;
+                let percentage = (elapsedTime / STORY_DURATION) * 100;
+                
+                if (percentage >= 100) {
+                    clearInterval(progressInterval);
+                    document.getElementById('progress-' + index).style.width = '100%';
+                    nextStory();
+                } else {
+                    document.getElementById('progress-' + index).style.width = percentage + '%';
+                }
+            }, 50);
+        }
+
+        function showStory(index) {
+            // Hide all stories
+            document.querySelectorAll('.story-item').forEach(el => el.classList.remove('active'));
+            // Pause all audios
+            document.querySelectorAll('audio').forEach(audio => {
+                audio.pause();
+                audio.currentTime = 0;
+            });
+
+            // Reset all progress bars
+            document.querySelectorAll('.progress-fill').forEach((el, i) => {
+                if (i < index) el.style.width = '100%';
+                else el.style.width = '0%';
+            });
+
+            // Show current story
+            document.getElementById('story-' + index).classList.add('active');
+            
+            // Play audio if exists
+            const currentAudio = document.getElementById('audio-' + index);
+            if (currentAudio) {
+                currentAudio.muted = isMuted;
+                currentAudio.play().catch(e => console.log("Audio play prevented:", e));
+            }
+            
+            // Start progress animation
+            isPaused = false;
+            const playPauseBtn = document.getElementById('play-pause-btn');
+            if (playPauseBtn) {
+                playPauseBtn.classList.remove('fa-play');
+                playPauseBtn.classList.add('fa-pause');
+            }
+            startTime = Date.now();
+            startProgressInterval(index);
+        }
+
+        function nextStory() {
+            if (currentIndex < totalStories - 1) {
+                currentIndex++;
+                showStory(currentIndex);
+            } else {
+                window.location.href = "{% url 'home' %}"; // Go back home when done
+            }
+        }
+
+        function prevStory() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                showStory(currentIndex);
+            } else {
+                // If on the first story, reset progress
+                showStory(currentIndex);
+            }
+        }
+
+        // Initialize first story
+        if (totalStories > 0) {
+            showStory(0);
+        }
+    </script>
+</body>
+</html>

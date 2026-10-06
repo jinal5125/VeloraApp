@@ -1,0 +1,152 @@
+/* ══ INSTAGRAM PREMIUM MODAL OVERLAY ════════════════ */
+:root {
+  --ig-border: #dbdbdb;
+  --ig-text: #262626;
+  --ig-secondary: #8e8e8e;
+  --ig-link: #0095f6;
+}
+
+body {
+  margin: 0; padding: 0;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+/* 1. WEBSITE BACKGROUND MOCK (Halka blurred piche) */
+.website-bg-mock {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  display: flex;
+  filter: blur(2px) brightness(0.9); /* Halki blur effect */
+  z-index: 1;
+}
+
+.feed-mock {
+  flex: 1;
+  padding: 40px;
+  background: #fafafa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.post-mock {
+  width: 470px;
+  height: 600px;
+  background: #fff;
+  border: 1px solid var(--ig-border);
+  margin-bottom: 20px;
+}
+
+/* 2. MODAL OVERLAY (Screenshot 2 jaisa light overlay) */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Real Instagram dark overlay */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* 3. MODAL CONTAINER */
+.modal-container {
+  background: #fff;
+  width: 95%;
+  max-width: 1100px;
+  height: 85vh;
+  display: flex;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+}
+
+/* Close Icon */
+.close-icon {
+  position: absolute;
+  top: 15px; right: 25px;
+  color: #fff; font-size: 45px;
+  cursor: pointer;
+  z-index: 1001;
+  font-weight: 200;
+}
+
+/* Left Media */
+.modal-media {
+  flex: 1.3;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.modal-media img {
+  width: 100%; height: 100%;
+  object-fit: contain;
+}
+
+/* Right Comments */
+.modal-comments {
+  flex: 1;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--ig-border);
+}
+
+/* Header */
+.m-header {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--ig-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.m-user { display: flex; align-items: center; gap: 12px; }
+.m-av { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
+.m-un { font-weight: 600; font-size: 14px; }
+
+/* Comment List Scrollable */
+.m-comment-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+.m-comment { display: flex; gap: 12px; margin-bottom: 18px; position: relative; }
+.m-text { font-size: 14px; line-height: 1.5; padding-right: 20px; }
+.m-text strong { font-weight: 600; margin-right: 6px; }
+.m-meta { font-size: 12px; color: var(--ig-secondary); margin-top: 4px; display: flex; gap: 15px; }
+.m-like-icon { position: absolute; right: 0; top: 5px; font-size: 12px; color: var(--ig-secondary); cursor: pointer; }
+
+/* Actions */
+.m-actions {
+  padding: 12px 16px;
+  border-top: 1px solid var(--ig-border);
+}
+.m-icons-row { display: flex; gap: 16px; font-size: 24px; margin-bottom: 8px; }
+.m-icons-row i { cursor: pointer; color: var(--ig-text); }
+.m-likes-bold { font-weight: 600; font-size: 14px; }
+.m-time { font-size: 10px; color: var(--ig-secondary); text-transform: uppercase; margin-top: 5px; }
+
+/* Input Footer */
+.m-input-area {
+  padding: 12px 16px;
+  border-top: 1px solid var(--ig-border);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.m-input-area input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+}
+.m-post-btn {
+  background: none; border: none; color: var(--ig-link); font-weight: 600; font-size: 14px; cursor: pointer;
+}
+
+/* Mobile View */
+@media (max-width: 800px) {
+  .modal-container { flex-direction: column; height: 95vh; }
+  .modal-media { display: none; }
+  .close-icon { top: 10px; right: 15px; color: #000; }
+}

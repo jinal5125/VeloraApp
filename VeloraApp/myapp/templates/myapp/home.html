@@ -1,0 +1,247 @@
+{% load static %}
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Velora — Home</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/userpanel.css' %}">
+</head>
+
+<body>
+
+  <!-- ══ LEFT SIDEBAR ══════════════════════════════ -->
+  <nav class="sidebar">
+    <div class="logo">vel<span>ora</span></div>
+    <div class="nav-links">
+      <a href="{% url 'home' %}" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-house"></i></span><span
+          class="nav-label">Home</span></a>
+      <a href="{% url 'search' %}" class="nav-item"><span class="nav-icon"><i
+            class="fa-solid fa-magnifying-glass"></i></span><span class="nav-label">Search</span></a>
+      <a href="{% url 'reels' %}" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-film"></i></span><span
+          class="nav-label">Reels</span></a>
+      <a href="{% url 'messages' %}" class="nav-item has-badge"><span class="nav-icon"><i
+            class="fa-solid fa-paper-plane"></i></span><span class="nav-label">Messages</span><span
+          class="badge">4</span></a>
+      <a href="{% url 'notifications' %}" class="nav-item has-badge"><span class="nav-icon"><i
+            class="fa-solid fa-bell"></i></span><span class="nav-label">Notifications</span><span
+          class="badge red">7</span></a>
+      <a href="{% url 'create' %}" class="nav-item"><span class="nav-icon"><i
+            class="fa-regular fa-square-plus"></i></span><span class="nav-label">Create</span></a>
+      <a href="{% url 'profile' %}" class="sidebar-profile-mini">
+        <span class="nav-icon">
+          <img src="{% if uid.profile_pic %}{{uid.profile_pic.url}}{% else %}/media/images/boy.png{% endif %}"
+            alt="Profile">
+        </span>
+        <span class="nav-label">Profile</span>
+      </a>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="nav-bottom">
+      <a href="{% url 'settings' %}" class="nav-item"><span class="nav-icon"><i
+            class="fa-solid fa-gear"></i></span><span class="nav-label">Settings</span></a>
+      <a href="{% url 'logout' %}" class="nav-item logout-btn"><span class="nav-icon"><i
+            class="fa-solid fa-right-from-bracket"></i></span><span class="nav-label">Logout</span></a>
+    </div>
+  </nav>
+
+  <!-- ══ ALL PAGES ══════════════════════════════════ -->
+  <div class="pages-wrapper">
+
+    <!-- ── HOME ─────────────────────────────────── -->
+    <div id="home" class="page page-with-panel" style="display:flex;">
+      <main class="feed-area">
+        <div class="stories-row">
+          <div class="story-pill your-story">
+            {% if my_story %}
+            <a href="{% url 'view_story' uid.id %}" style="text-decoration: none; color: inherit; display: contents;">
+            {% endif %}
+            <div class="story-av {% if my_story %}{% if uid.id in viewed_stories %}seen{% else %}ring{% endif %}{% endif %}">
+              <img src="{% if uid.profile_pic %}{{uid.profile_pic.url}}{% else %}/media/images/boy.png{% endif %}">
+              <a href="{% url 'create_story' %}" class="add-icon" style="text-decoration: none; color: white;">+</a>
+            </div>
+            <span>Your Story</span>
+            {% if my_story %}
+            </a>
+            {% endif %}
+          </div>
+
+          <!-- ------------------stories------------------------- -->
+          {% for story in story_all %}
+          <a href="{% url 'view_story' story.user.id %}" style="text-decoration: none; color: inherit; display: contents;">
+          <div class="story-pill">
+            <div class="story-av {% if story.user.id in viewed_stories %}seen{% else %}ring{% endif %}">
+              <img
+                src="{% if story.user.profile_pic %}{{story.user.profile_pic.url}}{% else %}/media/images/boy.png{% endif %}">
+            </div>
+            <span>{{story.user.username}}</span>
+          </div>
+          </a>
+          {% endfor %}
+
+        </div>
+
+        {% for post in post_all %}
+        <article class="post-card">
+          <div class="post-head">
+            <div class="post-av"><img
+                src="{% if post.user.profile_pic %}{{post.user.profile_pic.url}}{% else %}/media/images/boy.png{% endif %}">
+            </div>
+            <div class="post-info">
+              <div class="post-name">
+                <a href="{% url 'user_profile' post.user.id %}" style="text-decoration:none; color:inherit;">
+                  {{ post.user.username }}
+                </a>
+                <i class="fa-solid fa-circle-check verified"></i>
+
+              </div>
+              {% if post.location %}
+              <div class="post-loc"><i class="fa-solid fa-location-dot"></i>{{ post.location }}</div>
+              {% endif %}
+            </div><button class="more-btn"><i class="fa-solid fa-ellipsis"></i></button>
+          </div>
+          <div class="post-img-box"><img src="{{post.image.url}}" class="post-img">
+            <div class="img-overlay"></div>
+          </div>
+          <!-- <form method="post" action="{% url 'home' %}">
+          {% csrf_token %}
+          <input type="hidden" name="post_id" value="1"> -->
+          <div class="post-foot">
+            <div class="actions-row">
+              <div class="left-actions">
+
+                <form method="POST" action="{% url 'like_unlike_post' post.id %}" style="display:inline;">
+                  {% csrf_token %}
+
+                  <input type="hidden" name="type" value="post">
+
+                  {% if post.id in liked_posts %}
+                  <button type="submit" class="act-btn like-btn" style="background:none;border:none;">
+                    <i class="fa-solid fa-heart" style="color:#ff3040;"></i>
+                  </button>
+                  {% else %}
+                  <button type="submit" class="act-btn like-btn" style="background:none;border:none;">
+                    <i class="fa-regular fa-heart"></i>
+                  </button>
+                  {% endif %}
+
+                </form>
+
+
+                <a href="{% url 'comments' post.id %}">
+                  <button type="button" class="act-btn">
+                    <i class="fa-regular fa-comment"></i>
+                  </button>
+                </a>
+
+
+                <button type="button" class="act-btn">
+                  <i class="fa-regular fa-paper-plane"></i>
+                </button>
+              </div>
+              <button type="submit" name="action" value="save" class="act-btn save-btn">
+                <i class="fa-regular fa-bookmark"></i>
+              </button>
+            </div>
+            <div class="likes-count">{{post.like_post.count}} likes</div>
+            <div class="caption"><strong>{{post.user.username}}</strong> {{post.caption}}</div>
+            
+            <a href="{% url 'comments' post.id %}" style="text-decoration:none; color:inherit;">
+              <div class="comments-peek">View all {{ post.add_comments_set.count }} comments</div>
+            </a>
+            
+            <div class="time-stamp">{{ post.whenpublished }}</div>
+          </div>
+          <!-- </form> -->
+        </article>
+        {% endfor %}
+
+      </main>
+
+      <!-- RIGHT PANEL -->
+
+      <!-- RIGHT PANEL -->
+      <aside class="right-panel">
+        <div class="my-profile-card">
+          <a href="{% url 'profile' %}" style="text-decoration: none; display:flex; align-items:center; gap: inherit;">
+            <div class="my-av-wrap">
+              <img src="{% if uid.profile_pic %}{{uid.profile_pic.url}}{% else %}/media/images/boy.png{% endif %}"
+                class="my-av">
+            </div>
+            <div class="my-details">
+              <div class="my-name">{{uid.username}}</div>
+              <div class="my-handle">{{uid.fullname}}</div>
+            </div>
+          </a>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <a href="{% url 'logout' %}" class="switch-btn">logout</a>
+        </div>
+        <div class="panel-divider"></div>
+        <div class="stats-row">
+
+          <a href="{% url 'profile' %}" style="text-decoration:none; color:inherit; display:contents;">
+            <div class="stat-box">
+              <div class="stat-num">{{count_post}}</div>
+              <div class="stat-lbl">Posts</div>
+            </div>
+          </a>
+
+          <a href="{% url 'followers' %}" style="text-decoration:none; color:inherit; display:contents;">
+            <div class="stat-box">
+              <div class="stat-num">{{count_followers}}</div>
+              <div class="stat-lbl">Followers</div>
+            </div>
+          </a>
+
+          <a href="{% url 'following' %}" style="text-decoration:none; color:inherit; display:contents;">
+            <div class="stat-box">
+              <div class="stat-num">{{count_following }}</div>
+              <div class="stat-lbl">Following</div>
+            </div>
+          </a>
+        </div>
+        <div class="panel-divider"></div>
+        <div class="suggest-head"><span>Suggested for you</span><a href="#" class="see-all-link">See All</a></div>
+        <div class="suggest-list">
+
+          {% for user in suggested_users %}
+
+          <div class="suggest-item">
+            <div class="sug-av">
+              <img src="{% if user.profile_pic %}{{ user.profile_pic.url }}{% else %}/media/images/boy.png{% endif %}">
+            </div>
+            <div class="sug-info">
+              <div class="sug-name">{{ user.username }}
+              </div>
+              <div class="sug-note">{{ user.fullname}}</div>
+            </div>
+            <!-- <button class="follow-btn">Follow</button> -->
+
+            <form method="POST" action="{% url 'follow_unfollow' user.id %}">
+              {% csrf_token %}
+
+              {% if user.id in my_following %}
+              <button class="follow-btn" type="submit">Following</button>
+              {% else %}
+              <button class="follow-btn" type="submit">Follow</button>
+              {% endif %}
+
+            </form>
+          </div>
+
+          {% endfor %}
+
+        </div>
+        <div class="panel-footer"><a href="#">About</a> · <a href="#">Help</a> · <a href="#">Privacy</a>
+          <p>© 2026 Velora</p>
+        </div>
+      </aside>
+
+    </div><!-- /pages-wrapper -->
+</body>
+
+</html>
